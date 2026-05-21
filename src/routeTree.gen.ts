@@ -9,38 +9,104 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as PlaybookRouteImport } from './routes/playbook'
+import { Route as GlossaryRouteImport } from './routes/glossary'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PlaybookSlugRouteImport } from './routes/playbook.$slug'
 
+const PlaybookRoute = PlaybookRouteImport.update({
+  id: '/playbook',
+  path: '/playbook',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GlossaryRoute = GlossaryRouteImport.update({
+  id: '/glossary',
+  path: '/glossary',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PlaybookSlugRoute = PlaybookSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => PlaybookRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/glossary': typeof GlossaryRoute
+  '/playbook': typeof PlaybookRouteWithChildren
+  '/playbook/$slug': typeof PlaybookSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/glossary': typeof GlossaryRoute
+  '/playbook': typeof PlaybookRouteWithChildren
+  '/playbook/$slug': typeof PlaybookSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/glossary': typeof GlossaryRoute
+  '/playbook': typeof PlaybookRouteWithChildren
+  '/playbook/$slug': typeof PlaybookSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/about' | '/glossary' | '/playbook' | '/playbook/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/about' | '/glossary' | '/playbook' | '/playbook/$slug'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/glossary'
+    | '/playbook'
+    | '/playbook/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  GlossaryRoute: typeof GlossaryRoute
+  PlaybookRoute: typeof PlaybookRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/playbook': {
+      id: '/playbook'
+      path: '/playbook'
+      fullPath: '/playbook'
+      preLoaderRoute: typeof PlaybookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/glossary': {
+      id: '/glossary'
+      path: '/glossary'
+      fullPath: '/glossary'
+      preLoaderRoute: typeof GlossaryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,22 +114,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/playbook/$slug': {
+      id: '/playbook/$slug'
+      path: '/$slug'
+      fullPath: '/playbook/$slug'
+      preLoaderRoute: typeof PlaybookSlugRouteImport
+      parentRoute: typeof PlaybookRoute
+    }
   }
 }
 
+interface PlaybookRouteChildren {
+  PlaybookSlugRoute: typeof PlaybookSlugRoute
+}
+
+const PlaybookRouteChildren: PlaybookRouteChildren = {
+  PlaybookSlugRoute: PlaybookSlugRoute,
+}
+
+const PlaybookRouteWithChildren = PlaybookRoute._addFileChildren(
+  PlaybookRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  GlossaryRoute: GlossaryRoute,
+  PlaybookRoute: PlaybookRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
