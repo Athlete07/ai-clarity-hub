@@ -5,7 +5,7 @@ import { useProgress } from "@/lib/storage";
 import { StatusIndicator, StatusBadge } from "@/components/status";
 import { ArrowRight } from "lucide-react";
 
-export const Route = createFileRoute("/playbook")({
+export const Route = createFileRoute("/playbook/")({
   head: () => ({
     meta: [
       { title: "The Playbook — FactorBeam" },
