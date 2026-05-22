@@ -1,6 +1,23 @@
 import { Link } from "@tanstack/react-router";
 import { useStreak } from "@/lib/storage";
-import { Flame } from "lucide-react";
+import { useTheme } from "@/lib/theme";
+import { Flame, Moon, Sun } from "lucide-react";
+
+function ThemeToggle() {
+  const { theme, toggle } = useTheme();
+  const isDark = theme === "dark";
+  return (
+    <button
+      type="button"
+      onClick={toggle}
+      aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+      title={isDark ? "Switch to light mode" : "Switch to dark mode"}
+      className="hairline inline-flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+    >
+      {isDark ? <Sun size={14} /> : <Moon size={14} />}
+    </button>
+  );
+}
 
 export function Logo({ size = 15 }: { size?: number }) {
   return (
