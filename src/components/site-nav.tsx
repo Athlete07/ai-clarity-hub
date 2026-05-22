@@ -99,6 +99,7 @@ export function Nav({ slim = false }: { slim?: boolean }) {
               Start learning →
             </Link>
           ) : null}
+          <ThemeToggle />
         </div>
       </div>
     </header>
