@@ -208,20 +208,8 @@ const THEMES = {
 
 const PM_FOUNDATIONS_SEQUENCE = [
   {
-    slug: "what-is-ai",
-    note: "Learn the core definitions (AI vs ML vs DL) and probability-based thinking.",
-  },
-  {
-    slug: "machine-learning",
-    note: "Understand how models learn from data & labels and how they are evaluated.",
-  },
-  {
-    slug: "neural-networks",
-    note: "Demystify neural network layers and training (weights adjusting) vs inference.",
-  },
-  {
-    slug: "large-language-models",
-    note: "Learn how next-word prediction leads to hallucination and bias.",
+    slug: "ai-vs-ml-vs-deep-learning",
+    note: "The hierarchy you'll explain 100 times in your career — AI vs ML vs Deep Learning, rule-based vs learned systems, and the 3 questions to ask any vendor.",
   },
 ];
 
