@@ -63,6 +63,12 @@ export function Nav({ slim = false }: { slim?: boolean }) {
               Concepts
             </Link>
             <Link
+              to="/playbooks"
+              className="text-[13px] text-muted-foreground transition-colors hover:text-foreground"
+            >
+              Playbooks
+            </Link>
+            <Link
               to="/playbook"
               hash="examples"
               className="text-[13px] text-muted-foreground transition-colors hover:text-foreground"
