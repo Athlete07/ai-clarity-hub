@@ -49,9 +49,8 @@ function Home() {
             <span className="text-purple">without the jargon</span>
           </h1>
           <p className="mx-auto mt-5 max-w-[560px] text-[17px] leading-[1.6] text-muted-foreground">
-            A guided playbook for founders, operators and curious minds who want to
-            understand AI — not just use it. Highlight anything confusing and get an
-            instant explanation.
+            A guided playbook for founders, operators and curious minds who want to understand AI —
+            not just use it. Highlight anything confusing and get an instant explanation.
           </p>
           <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
             <Link
@@ -71,7 +70,9 @@ function Home() {
           {/* Progress preview card */}
           <div className="hairline mx-auto mt-10 rounded-xl bg-card p-5 text-left">
             <div className="flex items-center justify-between text-[12px] text-muted-foreground">
-              <span>{doneCount} of {concepts.length} concepts done</span>
+              <span>
+                {doneCount} of {concepts.length} concepts done
+              </span>
               <span>{pct}%</span>
             </div>
             <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-muted">
@@ -107,7 +108,9 @@ function Home() {
         <section className="mx-auto mt-28 max-w-[800px] px-6">
           <div className="text-center">
             <p className="section-label">Why this playbook</p>
-            <h2 className="mt-2 text-[24px] font-medium">Four small things that change everything</h2>
+            <h2 className="mt-2 text-[24px] font-medium">
+              Four small things that change everything
+            </h2>
           </div>
           <div className="mt-10 grid gap-4 sm:grid-cols-2">
             <FeatureCard

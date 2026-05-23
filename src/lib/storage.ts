@@ -87,10 +87,7 @@ export function useGlossary() {
   const add = useCallback((term: string, explanation: string) => {
     const list = readJson<GlossaryEntry[]>(GLOSSARY_KEY, []);
     if (list.some((e) => e.term.trim().toLowerCase() === term.trim().toLowerCase())) return;
-    const next = [
-      { id: crypto.randomUUID(), term, explanation, addedAt: Date.now() },
-      ...list,
-    ];
+    const next = [{ id: crypto.randomUUID(), term, explanation, addedAt: Date.now() }, ...list];
     writeJson(GLOSSARY_KEY, next);
     setEntries(next);
   }, []);

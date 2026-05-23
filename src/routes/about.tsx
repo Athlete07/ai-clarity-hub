@@ -30,18 +30,18 @@ function About() {
         <h1 className="text-[28px] font-medium">Why I built this</h1>
         <div className="mt-6 space-y-5 text-[15px] leading-[1.8] text-foreground">
           <p>
-            I'm a product manager trying to genuinely understand AI — not just the
-            surface layer. Every resource I found was either too technical or too
-            vague. So I built the thing I wished existed.
+            I'm a product manager trying to genuinely understand AI — not just the surface layer.
+            Every resource I found was either too technical or too vague. So I built the thing I
+            wished existed.
           </p>
           <p>
-            FactorBeam is a personal playbook made public. Every concept is written
-            for people who think in products, not models. The highlight-to-explain
-            feature exists because I kept getting stuck on single sentences.
+            FactorBeam is a personal playbook made public. Every concept is written for people who
+            think in products, not models. The highlight-to-explain feature exists because I kept
+            getting stuck on single sentences.
           </p>
           <p>
-            This is free, always. I'm learning in public. If it helps you too,
-            that's the whole point.
+            This is free, always. I'm learning in public. If it helps you too, that's the whole
+            point.
           </p>
         </div>
 

@@ -112,12 +112,8 @@ export function Quiz({
             );
           })}
         </div>
-        {picked !== null && (
-          <p className="mt-3 text-[12px] text-success">{q.correctFeedback}</p>
-        )}
-        {wrongFlash !== null && (
-          <p className="mt-3 text-[12px] text-error">{q.wrongFeedback}</p>
-        )}
+        {picked !== null && <p className="mt-3 text-[12px] text-success">{q.correctFeedback}</p>}
+        {wrongFlash !== null && <p className="mt-3 text-[12px] text-error">{q.wrongFeedback}</p>}
       </div>
     </section>
   );

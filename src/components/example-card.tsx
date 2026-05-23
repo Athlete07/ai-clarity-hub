@@ -2,7 +2,15 @@ import { useState } from "react";
 import type { Example } from "@/lib/concepts";
 import { ChevronDown } from "lucide-react";
 
-export function ExampleCard({ example, index, defaultOpen = false }: { example: Example; index: number; defaultOpen?: boolean }) {
+export function ExampleCard({
+  example,
+  index,
+  defaultOpen = false,
+}: {
+  example: Example;
+  index: number;
+  defaultOpen?: boolean;
+}) {
   const [open, setOpen] = useState(defaultOpen);
   return (
     <article className="hairline overflow-hidden rounded-xl bg-card">

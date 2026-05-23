@@ -40,7 +40,9 @@ function Playbook() {
         </p>
 
         <div className="mt-6 flex items-center justify-between text-[12px] text-muted-foreground">
-          <span>{doneCount} of {concepts.length} done</span>
+          <span>
+            {doneCount} of {concepts.length} done
+          </span>
           <span>{pct}%</span>
         </div>
         <div className="mt-1.5 h-1 w-full overflow-hidden rounded-full bg-muted">
@@ -67,12 +69,8 @@ function Playbook() {
                   <p className="text-[11px] text-muted-foreground">
                     Concept {c.number} of {concepts.length}
                   </p>
-                  <h2 className="mt-0.5 text-[15px] font-medium text-foreground">
-                    {c.title}
-                  </h2>
-                  <p className="mt-1 text-[13px] text-muted-foreground line-clamp-1">
-                    {c.summary}
-                  </p>
+                  <h2 className="mt-0.5 text-[15px] font-medium text-foreground">{c.title}</h2>
+                  <p className="mt-1 text-[13px] text-muted-foreground line-clamp-1">{c.summary}</p>
                   <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-muted-foreground">
                     <span>~{c.readingMinutes * 5} min</span>
                     <span aria-hidden>·</span>

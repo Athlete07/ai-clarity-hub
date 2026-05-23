@@ -13,7 +13,11 @@ function genericFallback(text: string): string {
   return `This part of the concept relates to how the model processes information — in context, "${trimmed}" means roughly: the model is working out a piece of the pattern using everything it has already seen.`;
 }
 
-export function HighlightExplainer({ containerRef }: { containerRef: React.RefObject<HTMLElement | null> }) {
+export function HighlightExplainer({
+  containerRef,
+}: {
+  containerRef: React.RefObject<HTMLElement | null>;
+}) {
   const [tip, setTip] = useState<TooltipState | null>(null);
   const tipRef = useRef<HTMLDivElement | null>(null);
   const { add } = useGlossary();

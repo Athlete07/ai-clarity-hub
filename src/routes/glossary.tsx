@@ -44,9 +44,7 @@ function Glossary() {
                 }`}
               >
                 <p className="text-[14px] font-medium text-foreground">{e.term}</p>
-                <p className="text-[13px] leading-relaxed text-muted-foreground">
-                  {e.explanation}
-                </p>
+                <p className="text-[13px] leading-relaxed text-muted-foreground">{e.explanation}</p>
                 <button
                   onClick={() => remove(e.id)}
                   className="justify-self-end rounded-md p-2 text-muted-foreground hover:bg-muted hover:text-error"

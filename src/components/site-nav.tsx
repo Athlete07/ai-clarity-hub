@@ -27,9 +27,7 @@ export function Logo({ size = 15 }: { size?: number }) {
         className="inline-block rounded-full bg-purple"
         style={{ width: 8, height: 8 }}
       />
-      <span style={{ fontSize: size, fontWeight: 500, letterSpacing: "-0.01em" }}>
-        FactorBeam
-      </span>
+      <span style={{ fontSize: size, fontWeight: 500, letterSpacing: "-0.01em" }}>FactorBeam</span>
     </Link>
   );
 }

@@ -20,16 +20,20 @@ export function statusFor(slug: string, progress: Progress, allowLocked = false)
   return "todo";
 }
 
-export function StatusIndicator({ status, number, size = 28 }: { status: Status; number: number; size?: number }) {
+export function StatusIndicator({
+  status,
+  number,
+  size = 28,
+}: {
+  status: Status;
+  number: number;
+  size?: number;
+}) {
   const base = `flex shrink-0 items-center justify-center rounded-full text-[12px] font-medium`;
   const style = { width: size, height: size };
   if (status === "done")
     return (
-      <span
-        className={`${base} bg-success-bg text-success`}
-        style={style}
-        aria-label="Completed"
-      >
+      <span className={`${base} bg-success-bg text-success`} style={style} aria-label="Completed">
         <Check size={size * 0.5} />
       </span>
     );
@@ -54,10 +58,26 @@ export function StatusIndicator({ status, number, size = 28 }: { status: Status;
 
 export function StatusBadge({ status }: { status: Status }) {
   if (status === "done")
-    return <span className="rounded-md bg-success-bg px-2 py-0.5 text-[11px] font-medium text-success">Done</span>;
+    return (
+      <span className="rounded-md bg-success-bg px-2 py-0.5 text-[11px] font-medium text-success">
+        Done
+      </span>
+    );
   if (status === "active")
-    return <span className="rounded-md bg-purple-light px-2 py-0.5 text-[11px] font-medium text-purple-dark">In progress</span>;
+    return (
+      <span className="rounded-md bg-purple-light px-2 py-0.5 text-[11px] font-medium text-purple-dark">
+        In progress
+      </span>
+    );
   if (status === "locked")
-    return <span className="rounded-md bg-muted px-2 py-0.5 text-[11px] font-medium text-muted-foreground">Locked</span>;
-  return <span className="rounded-md bg-muted px-2 py-0.5 text-[11px] font-medium text-muted-foreground">Not started</span>;
+    return (
+      <span className="rounded-md bg-muted px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
+        Locked
+      </span>
+    );
+  return (
+    <span className="rounded-md bg-muted px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
+      Not started
+    </span>
+  );
 }

@@ -59,7 +59,9 @@ export const concepts: Concept[] = [
             "Artificial intelligence flips that around: instead of writing rules, you show the computer a lot of examples, and it figures out the rules on its own.",
             "Instead of you telling the system 'if X then Y', you show it thousands of examples of X paired with Y, and it learns the relationship statistically.",
           ),
-          s(" That's the entire conceptual shift. Everything else — neural networks, transformers, ChatGPT — is just better and better ways of doing that one thing."),
+          s(
+            " That's the entire conceptual shift. Everything else — neural networks, transformers, ChatGPT — is just better and better ways of doing that one thing.",
+          ),
         ],
       },
       {
@@ -70,7 +72,9 @@ export const concepts: Concept[] = [
             "Sometimes it means a spam filter. Sometimes a chatbot. Sometimes a self-driving car.",
             "These are all AI, but at very different levels of complexity. A spam filter learns one narrow pattern. A self-driving car has to learn vision, prediction, planning, and control all at once.",
           ),
-          s(" The common thread is always the same: the behavior was learned from data, not handwritten."),
+          s(
+            " The common thread is always the same: the behavior was learned from data, not handwritten.",
+          ),
         ],
       },
       {
@@ -80,7 +84,9 @@ export const concepts: Concept[] = [
             "This is why AI products feel weirdly inconsistent compared to normal software.",
             "Because the rules were learned, not written, the system can be brilliant on one input and confidently wrong on the next. Traditional software fails predictably; AI fails creatively.",
           ),
-          s(" A regular app either works or has a bug you can fix. An AI app has tendencies, blind spots, and good and bad days — because its 'rules' live inside a giant pile of learned numbers nobody fully understands."),
+          s(
+            " A regular app either works or has a bug you can fix. An AI app has tendencies, blind spots, and good and bad days — because its 'rules' live inside a giant pile of learned numbers nobody fully understands.",
+          ),
         ],
       },
     ],
@@ -116,8 +122,10 @@ export const concepts: Concept[] = [
           "It runs on the cloud",
         ],
         correct: 1,
-        correctFeedback: "Exactly right. The defining shift is learning from examples instead of being given rules.",
-        wrongFeedback: "Not quite. Re-read the second paragraph — the key shift is about rules vs. examples.",
+        correctFeedback:
+          "Exactly right. The defining shift is learning from examples instead of being given rules.",
+        wrongFeedback:
+          "Not quite. Re-read the second paragraph — the key shift is about rules vs. examples.",
       },
       {
         q: "Why do AI products often feel inconsistent compared to normal software?",
@@ -129,7 +137,8 @@ export const concepts: Concept[] = [
         ],
         correct: 2,
         correctFeedback: "Right. Learned behavior means learned blind spots.",
-        wrongFeedback: "Re-read the last paragraph — it's about how learned rules differ from written rules.",
+        wrongFeedback:
+          "Re-read the last paragraph — it's about how learned rules differ from written rules.",
       },
       {
         q: "Which of these is NOT really 'AI' in the sense we're using the word?",
@@ -140,7 +149,8 @@ export const concepts: Concept[] = [
           "Netflix recommendations",
         ],
         correct: 2,
-        correctFeedback: "Correct. A calculator follows a hand-written rule. There's no learning happening.",
+        correctFeedback:
+          "Correct. A calculator follows a hand-written rule. There's no learning happening.",
         wrongFeedback: "Look for the one that doesn't involve learning from examples.",
       },
     ],
@@ -177,7 +187,9 @@ export const concepts: Concept[] = [
             "A rules-based fraud system might say: 'flag any transaction over $10,000 from a new device'. A trained model says: 'here are 50 million transactions labeled fraud or not — figure out what fraud looks like'.",
             "The rules-based system is transparent but fragile: any pattern not in the rules slips through. The trained model catches subtle combinations of features no human would have written by hand.",
           ),
-          s(" The rules-based version is easier to audit. The ML version usually performs much better."),
+          s(
+            " The rules-based version is easier to audit. The ML version usually performs much better.",
+          ),
         ],
       },
       {
@@ -187,7 +199,9 @@ export const concepts: Concept[] = [
             "There are three flavors of machine learning that you'll see referenced: supervised, unsupervised, and reinforcement.",
             "Supervised = learning from labeled examples. Unsupervised = finding structure in unlabeled data. Reinforcement = learning from trial and error with rewards.",
           ),
-          s(" Most products you use rely on supervised learning, where every training example has an answer attached."),
+          s(
+            " Most products you use rely on supervised learning, where every training example has an answer attached.",
+          ),
         ],
       },
       {
@@ -197,7 +211,9 @@ export const concepts: Concept[] = [
             "The quality of a machine learning system depends almost entirely on the quality of its data.",
             "Bad data in, bad model out. If your training examples are unrepresentative, biased, or noisy, the model will faithfully learn those flaws.",
           ),
-          s(" That's why teams shipping ML often spend more time on data than on the algorithm itself. The algorithms are commoditized; the data isn't."),
+          s(
+            " That's why teams shipping ML often spend more time on data than on the algorithm itself. The algorithms are commoditized; the data isn't.",
+          ),
         ],
       },
     ],
@@ -246,7 +262,8 @@ export const concepts: Concept[] = [
         ],
         correct: 1,
         correctFeedback: "Exactly. The model is only as good as the examples it learned from.",
-        wrongFeedback: "Re-read the last paragraph — it's about how data quality shapes model quality.",
+        wrongFeedback:
+          "Re-read the last paragraph — it's about how data quality shapes model quality.",
       },
       {
         q: "A rules-based system and an ML model both try to detect fraud. What's the typical trade-off?",
@@ -258,7 +275,8 @@ export const concepts: Concept[] = [
         ],
         correct: 2,
         correctFeedback: "Right. Auditability vs. performance is the classic trade-off.",
-        wrongFeedback: "Re-read the second paragraph — note which is easier to audit and which performs better.",
+        wrongFeedback:
+          "Re-read the second paragraph — note which is easier to audit and which performs better.",
       },
     ],
   },
@@ -282,7 +300,9 @@ export const concepts: Concept[] = [
             "A neural network is a stack of very simple math operations connected together in layers.",
             "Each 'neuron' is essentially: take some numbers, multiply each by a weight, add them up, and pass the result through a simple function. That's it. The magic comes from stacking a lot of them.",
           ),
-          s(" Each connection between layers has a number attached to it, called a weight. The network's behavior is entirely determined by those weights."),
+          s(
+            " Each connection between layers has a number attached to it, called a weight. The network's behavior is entirely determined by those weights.",
+          ),
         ],
       },
       {
@@ -293,7 +313,9 @@ export const concepts: Concept[] = [
             "You feed in an input, the network produces an output, you compare it to the right answer, and you push every weight a tiny bit in the direction that would have made the answer better.",
             "This is called backpropagation. Don't worry about the math — what matters is that the network keeps a running tally of which weights are responsible for which mistakes, and corrects them.",
           ),
-          s(" Repeat that a few billion times and the weights settle into a configuration that handles your task well."),
+          s(
+            " Repeat that a few billion times and the weights settle into a configuration that handles your task well.",
+          ),
         ],
       },
       {
@@ -303,7 +325,9 @@ export const concepts: Concept[] = [
             "The 'deep' in deep learning just means a network with many layers stacked on top of each other.",
             "More layers means the network can build up more abstract patterns: early layers learn edges, later layers learn shapes, later still learn objects, and so on.",
           ),
-          s(" Modern networks can have hundreds of layers and billions of weights. The basic operation is still the same simple math, just enormously scaled up."),
+          s(
+            " Modern networks can have hundreds of layers and billions of weights. The basic operation is still the same simple math, just enormously scaled up.",
+          ),
         ],
       },
       {
@@ -313,7 +337,9 @@ export const concepts: Concept[] = [
             "Nobody — not even the people who built it — can directly read what a trained neural network 'knows'.",
             "The knowledge isn't stored as words or rules. It's spread out across billions of numerical weights in a way that resists clean explanation. That's why interpretability is its own research field.",
           ),
-          s(" You can probe it with inputs, you can measure its outputs, but you can't open it up and see a list of rules. That opacity is one of the real costs of using neural networks."),
+          s(
+            " You can probe it with inputs, you can measure its outputs, but you can't open it up and see a list of rules. That opacity is one of the real costs of using neural networks.",
+          ),
         ],
       },
     ],
@@ -349,7 +375,8 @@ export const concepts: Concept[] = [
           "The amount of compute the model uses",
         ],
         correct: 1,
-        correctFeedback: "Exactly. Weights are the adjustable numbers that hold what the network has learned.",
+        correctFeedback:
+          "Exactly. Weights are the adjustable numbers that hold what the network has learned.",
         wrongFeedback: "Re-read paragraph one — weights live on the connections between neurons.",
       },
       {
@@ -374,7 +401,8 @@ export const concepts: Concept[] = [
         ],
         correct: 1,
         correctFeedback: "Yes — opacity is structural, not a secrecy issue.",
-        wrongFeedback: "Re-read the last paragraph — it's about how the knowledge is structurally stored.",
+        wrongFeedback:
+          "Re-read the last paragraph — it's about how the knowledge is structurally stored.",
       },
     ],
   },
@@ -394,7 +422,9 @@ export const concepts: Concept[] = [
       {
         kind: "p",
         parts: [
-          s("Before transformers, the dominant way to process language was to read words one at a time, left to right, carrying a kind of summary as you went. "),
+          s(
+            "Before transformers, the dominant way to process language was to read words one at a time, left to right, carrying a kind of summary as you went. ",
+          ),
           x(
             "That worked, but it struggled with long sentences — by the time you got to the end, the model had often 'forgotten' the start.",
             "Older models like RNNs and LSTMs had this exact bottleneck: they processed sequentially and lost track of earlier context as new words came in.",
@@ -409,7 +439,9 @@ export const concepts: Concept[] = [
             "The core idea is called attention. For every word, the model looks at every other word in the input and decides which ones matter most for understanding this one.",
             "Imagine you read the sentence 'The trophy didn't fit in the suitcase because it was too big.' To understand what 'it' refers to, you need to attend more to 'trophy' than to other words. Attention is the math that lets the model do exactly this.",
           ),
-          s(" That means every word in your prompt is connected to every other word, in parallel, instead of waiting in a line."),
+          s(
+            " That means every word in your prompt is connected to every other word, in parallel, instead of waiting in a line.",
+          ),
         ],
       },
       {
@@ -419,7 +451,9 @@ export const concepts: Concept[] = [
             "Because attention can be computed for all words in parallel, transformers train much faster on modern hardware.",
             "GPUs are extremely good at parallel math. Older sequential models wasted that hardware; transformers exploit it fully. This is why model sizes exploded after transformers showed up.",
           ),
-          s(" That speed advantage is half of why models like GPT-4 exist at all — without parallel-friendly architectures, the data and compute needed would be infeasible."),
+          s(
+            " That speed advantage is half of why models like GPT-4 exist at all — without parallel-friendly architectures, the data and compute needed would be infeasible.",
+          ),
         ],
       },
       {
@@ -429,7 +463,9 @@ export const concepts: Concept[] = [
             "Transformers also don't only apply to text. The same architecture powers image generation, audio models, code completion, and biology models like AlphaFold.",
             "The architecture is general — anything you can chop into tokens (words, image patches, sound clips, DNA bases) can be fed into a transformer. That generality is part of why a single architecture is eating the AI world.",
           ),
-          s(" That's why 'transformer' has become a kind of universal AI building block, not just a language-model thing."),
+          s(
+            " That's why 'transformer' has become a kind of universal AI building block, not just a language-model thing.",
+          ),
         ],
       },
     ],
@@ -477,7 +513,8 @@ export const concepts: Concept[] = [
           "Because they don't need any training",
         ],
         correct: 1,
-        correctFeedback: "Right. Parallelism unlocked the hardware that made GPT-scale training possible.",
+        correctFeedback:
+          "Right. Parallelism unlocked the hardware that made GPT-scale training possible.",
         wrongFeedback: "Look at paragraph three — it's about hardware fit.",
       },
       {
@@ -514,7 +551,9 @@ export const concepts: Concept[] = [
             "A large language model is, at its core, a next-word predictor.",
             "You give it some text. It predicts the most likely next word. Then it adds that word to the input and predicts the next one. That's the entire generation process, repeated thousands of times per response.",
           ),
-          s(" It was trained on enormous amounts of text — books, websites, code, conversations — and learned the statistical patterns of how language is used."),
+          s(
+            " It was trained on enormous amounts of text — books, websites, code, conversations — and learned the statistical patterns of how language is used.",
+          ),
         ],
       },
       {
@@ -535,7 +574,9 @@ export const concepts: Concept[] = [
             "But this also explains the failure modes. LLMs don't 'know' things — they predict what text is likely to look like.",
             "When the model doesn't have strong patterns to lean on, it just generates the most plausible-looking text anyway. That's hallucination: confident-sounding output that simply isn't true.",
           ),
-          s(" They have no internal database of facts, no way to check their own work, and no real sense of whether they're right or wrong."),
+          s(
+            " They have no internal database of facts, no way to check their own work, and no real sense of whether they're right or wrong.",
+          ),
         ],
       },
       {
@@ -545,7 +586,9 @@ export const concepts: Concept[] = [
             "There are tricks to make LLMs more reliable: giving them tools, letting them search the web, grounding them in your own documents.",
             "This is called retrieval-augmented generation (RAG) and tool use. The model isn't getting smarter — it's getting external help so its next-word predictions can be based on real information.",
           ),
-          s(" Those tricks are useful, but they don't change what the model fundamentally is: a very large, very practiced text-completion engine."),
+          s(
+            " Those tricks are useful, but they don't change what the model fundamentally is: a very large, very practiced text-completion engine.",
+          ),
         ],
       },
     ],
@@ -593,7 +636,8 @@ export const concepts: Concept[] = [
           "They run out of memory",
         ],
         correct: 2,
-        correctFeedback: "Right. Hallucination is a feature of how prediction works, not a bug to patch.",
+        correctFeedback:
+          "Right. Hallucination is a feature of how prediction works, not a bug to patch.",
         wrongFeedback: "Re-read paragraph three — it's about how predicting differs from knowing.",
       },
       {
@@ -630,7 +674,9 @@ export const concepts: Concept[] = [
             "A prompt is just the text you give an LLM as input. That's it.",
             "There's nothing magical about it. The model reads your prompt, then starts predicting what should come next. Everything downstream depends on what you put in.",
           ),
-          s(" Because the model has no other context — no memory of you, no real-world knowledge of your situation — the prompt is the entire context it has to work with."),
+          s(
+            " Because the model has no other context — no memory of you, no real-world knowledge of your situation — the prompt is the entire context it has to work with.",
+          ),
         ],
       },
       {
@@ -661,7 +707,9 @@ export const concepts: Concept[] = [
             "What doesn't work well: vague instructions, contradictory constraints, and assuming the model knows things it doesn't.",
             "Common failure modes: 'make it better' (better how?), 'be concise but thorough' (pick one), 'use our internal terminology' (it doesn't know your internal anything unless you give it).",
           ),
-          s(" If a prompt feels frustrating, the answer is almost always to add more context, not to repeat yourself louder."),
+          s(
+            " If a prompt feels frustrating, the answer is almost always to add more context, not to repeat yourself louder.",
+          ),
         ],
       },
     ],
@@ -721,7 +769,8 @@ export const concepts: Concept[] = [
           "Asking in all caps",
         ],
         correct: 2,
-        correctFeedback: "Right. Few-shot examples are one of the most reliable prompting patterns.",
+        correctFeedback:
+          "Right. Few-shot examples are one of the most reliable prompting patterns.",
         wrongFeedback: "Re-read paragraph three — clarity beats volume.",
       },
     ],
@@ -742,7 +791,9 @@ export const concepts: Concept[] = [
       {
         kind: "p",
         parts: [
-          s("A regular chatbot reads your message and writes a response. That's the whole interaction. "),
+          s(
+            "A regular chatbot reads your message and writes a response. That's the whole interaction. ",
+          ),
           x(
             "An agent goes further: it can decide to take an action, see what happened, and then decide what to do next, looping until the goal is reached.",
             "The agent loop is: think → act → observe → think again. The model is the brain; the tools (search, code execution, API calls) are the hands. The loop is what turns a chat model into something that gets things done.",
@@ -767,7 +818,9 @@ export const concepts: Concept[] = [
             "The strengths of agents come from the loop: they can handle multi-step tasks, recover from mistakes, and combine tools creatively.",
             "Examples include: research that needs five searches, coding tasks that need to run tests and iterate, customer support that needs to look up account state and then take an action.",
           ),
-          s(" The weaknesses also come from the loop: agents can get stuck in cycles, take wrong actions confidently, and burn through API budget surprisingly fast."),
+          s(
+            " The weaknesses also come from the loop: agents can get stuck in cycles, take wrong actions confidently, and burn through API budget surprisingly fast.",
+          ),
         ],
       },
       {
@@ -777,7 +830,9 @@ export const concepts: Concept[] = [
             "Designing an agent is mostly about constraints: which tools it has, what it's allowed to do, when to stop, and how to recover when things go off the rails.",
             "Production agents almost always have step limits, budget limits, restricted tool sets, and human approval gates for high-impact actions. The freedom is what makes them useful; the constraints are what keep them safe.",
           ),
-          s(" The interesting product work isn't building the agent — it's designing the guardrails."),
+          s(
+            " The interesting product work isn't building the agent — it's designing the guardrails.",
+          ),
         ],
       },
     ],

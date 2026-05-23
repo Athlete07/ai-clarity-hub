@@ -68,7 +68,9 @@ export const Route = createFileRoute("/playbook/$slug")({
 });
 
 function ConceptPage() {
-  const { concept } = Route.useLoaderData() as { concept: NonNullable<ReturnType<typeof conceptBySlug>> };
+  const { concept } = Route.useLoaderData() as {
+    concept: NonNullable<ReturnType<typeof conceptBySlug>>;
+  };
   const { progress, markDone, markInProgress } = useProgress();
   const articleRef = useRef<HTMLElement | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -85,7 +87,10 @@ function ConceptPage() {
   return (
     <div className="min-h-screen">
       {/* Slim top nav with progress */}
-      <header className="sticky top-0 z-40 hairline-b bg-background/85 backdrop-blur" style={{ height: 52 }}>
+      <header
+        className="sticky top-0 z-40 hairline-b bg-background/85 backdrop-blur"
+        style={{ height: 52 }}
+      >
         <div className="mx-auto flex h-full max-w-[1100px] items-center justify-between px-4 sm:px-6">
           <div className="flex items-center gap-3">
             <button
@@ -96,7 +101,10 @@ function ConceptPage() {
               <Menu size={18} />
             </button>
             <Link to="/" className="flex items-center gap-2">
-              <span className="inline-block rounded-full bg-purple" style={{ width: 8, height: 8 }} />
+              <span
+                className="inline-block rounded-full bg-purple"
+                style={{ width: 8, height: 8 }}
+              />
               <span className="text-[15px] font-medium">FactorBeam</span>
             </Link>
             <Link
@@ -130,9 +138,7 @@ function ConceptPage() {
           <article ref={articleRef} className="relative mx-auto max-w-[660px]">
             <HighlightExplainer containerRef={articleRef} />
 
-            <p className="text-[11px] text-muted-foreground">
-              Module 1 › {concept.shortTitle}
-            </p>
+            <p className="text-[11px] text-muted-foreground">Module 1 › {concept.shortTitle}</p>
             <div className="mt-3 flex flex-wrap items-center gap-3 text-[12px]">
               <span className="rounded-md bg-purple-light px-2 py-0.5 text-[11px] font-medium text-purple-dark">
                 Concept {concept.number} of {concepts.length}
@@ -320,13 +326,22 @@ function Sidebar({
       </ul>
       <div className="hairline-t mt-6 pt-5">
         <p className="section-label mb-2">On this page</p>
-        <a href="#concept" className="block py-1 text-[13px] text-muted-foreground hover:text-foreground">
+        <a
+          href="#concept"
+          className="block py-1 text-[13px] text-muted-foreground hover:text-foreground"
+        >
           The concept
         </a>
-        <a href="#examples" className="block py-1 text-[13px] text-muted-foreground hover:text-foreground">
+        <a
+          href="#examples"
+          className="block py-1 text-[13px] text-muted-foreground hover:text-foreground"
+        >
           5 examples
         </a>
-        <a href="#quiz" className="block py-1 text-[13px] text-muted-foreground hover:text-foreground">
+        <a
+          href="#quiz"
+          className="block py-1 text-[13px] text-muted-foreground hover:text-foreground"
+        >
           Quiz
         </a>
       </div>
