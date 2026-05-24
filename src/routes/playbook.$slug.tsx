@@ -179,22 +179,25 @@ function ConceptPage() {
             </div>
 
             {/* Examples */}
-            <section id="examples" className="mt-14">
-              <p className="section-label">Examples</p>
+            {concept.examples.length > 0 && (
+              <section id="examples" className="mt-14">
+                <p className="section-label">Examples</p>
 
-              <div
-                className="mt-3 rounded-xl bg-amber-bg/70 px-5 py-4 text-[14px] italic text-foreground"
-                style={{ borderLeft: "3px solid var(--amber)" }}
-              >
-                {concept.pmCallout}
-              </div>
+                <div
+                  className="mt-3 rounded-xl bg-amber-bg/70 px-5 py-4 text-[14px] italic text-foreground"
+                  style={{ borderLeft: "3px solid var(--amber)" }}
+                >
+                  {concept.pmCallout}
+                </div>
 
-              <div className="mt-5 space-y-3">
-                {concept.examples.map((ex, i) => (
-                  <ExampleCard key={i} example={ex} index={i} defaultOpen={i === 0} />
-                ))}
-              </div>
-            </section>
+                <div className="mt-5 space-y-3">
+                  {concept.examples.map((ex, i) => (
+                    <ExampleCard key={i} example={ex} index={i} defaultOpen={i === 0} />
+                  ))}
+                </div>
+              </section>
+            )}
+
 
             {/* Quiz */}
             <section id="quiz">
