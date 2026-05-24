@@ -145,9 +145,9 @@ function ConceptPage() {
               </span>
               <span className="inline-flex items-center gap-1 text-muted-foreground">
                 <Clock size={12} />
-                {concept.readingMinutes} min read · {concept.examples.length} examples ·{" "}
-                {concept.quiz.length} questions
+                {concept.readingMinutes} min read · {concept.quiz.length} quiz questions
               </span>
+
             </div>
 
             <h1 id="concept" className="mt-4 text-[26px] font-medium leading-snug">
@@ -179,22 +179,25 @@ function ConceptPage() {
             </div>
 
             {/* Examples */}
-            <section id="examples" className="mt-14">
-              <p className="section-label">Examples</p>
+            {concept.examples.length > 0 && (
+              <section id="examples" className="mt-14">
+                <p className="section-label">Examples</p>
 
-              <div
-                className="mt-3 rounded-xl bg-amber-bg/70 px-5 py-4 text-[14px] italic text-foreground"
-                style={{ borderLeft: "3px solid var(--amber)" }}
-              >
-                {concept.pmCallout}
-              </div>
+                <div
+                  className="mt-3 rounded-xl bg-amber-bg/70 px-5 py-4 text-[14px] italic text-foreground"
+                  style={{ borderLeft: "3px solid var(--amber)" }}
+                >
+                  {concept.pmCallout}
+                </div>
 
-              <div className="mt-5 space-y-3">
-                {concept.examples.map((ex, i) => (
-                  <ExampleCard key={i} example={ex} index={i} defaultOpen={i === 0} />
-                ))}
-              </div>
-            </section>
+                <div className="mt-5 space-y-3">
+                  {concept.examples.map((ex, i) => (
+                    <ExampleCard key={i} example={ex} index={i} defaultOpen={i === 0} />
+                  ))}
+                </div>
+              </section>
+            )}
+
 
             {/* Quiz */}
             <section id="quiz">
@@ -260,17 +263,59 @@ function ConceptPage() {
 function BodyParagraph({ block }: { block: ConceptBodyBlock }) {
   if (block.kind === "h") {
     return (
-      <div className="hairline-t mt-8 pt-6">
+      <div className="hairline-t mt-10 pt-6">
         <p className="text-[11px] font-medium uppercase tracking-wider text-purple">
           Section {block.number}
         </p>
-        <h2 className="mt-1 text-[19px] font-medium leading-snug text-foreground">
+        <h2 className="mt-1 text-[20px] font-medium leading-snug text-foreground">
           {block.title}
         </h2>
         {block.subtitle && (
           <p className="mt-1 text-[14px] italic text-muted-foreground">{block.subtitle}</p>
         )}
       </div>
+    );
+  }
+  if (block.kind === "take") {
+    return (
+      <div
+        className="rounded-xl bg-purple-light/70 px-5 py-4 text-[14px] text-purple-dark"
+        style={{ borderLeft: "3px solid var(--purple)" }}
+      >
+        <p className="text-[10px] font-medium uppercase tracking-wider text-purple">
+          Key takeaway
+        </p>
+        <p className="mt-1 font-medium leading-relaxed">{block.text}</p>
+      </div>
+    );
+  }
+  if (block.kind === "why") {
+    return (
+      <div
+        className="rounded-xl bg-amber-bg/70 px-5 py-4 text-[14px] italic text-foreground"
+        style={{ borderLeft: "3px solid var(--amber)" }}
+      >
+        <p className="mb-1 text-[10px] font-medium uppercase tracking-wider text-foreground/70 not-italic">
+          Why this matters for you
+        </p>
+        {block.text}
+      </div>
+    );
+  }
+  if (block.kind === "ex") {
+    return (
+      <div className="hairline rounded-xl bg-card px-5 py-4">
+        <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
+          Example
+        </p>
+        <p className="mt-1 text-[14px] font-medium text-foreground">{block.title}</p>
+        <p className="mt-2 text-[14px] leading-relaxed text-foreground/90">{block.body}</p>
+      </div>
+    );
+  }
+  if (block.kind === "trans") {
+    return (
+      <p className="text-[14px] italic leading-relaxed text-muted-foreground">{block.text}</p>
     );
   }
   return (
