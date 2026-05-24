@@ -6,7 +6,14 @@ export type ConceptBodyBlock =
   | { kind: "take"; text: string }
   | { kind: "why"; text: string }
   | { kind: "ex"; title: string; body: string }
-  | { kind: "trans"; text: string };
+  | { kind: "trans"; text: string }
+  | {
+      kind: "diagram";
+      id: string;
+      type: "flow" | "nested" | "comparison" | "tree";
+      title: string;
+      caption: string;
+    };
 
 export type Example = { title: string; body: string };
 export type QuizQuestion = {
@@ -35,140 +42,6 @@ const s = (text: string): string => text;
 const x = (text: string, explain: string): ExplainSpan => ({ text, explain });
 
 export const concepts: Concept[] = [
-  {
-    slug: "pm-how-models-learn",
-    number: 2,
-    shortTitle: "How Models Learn",
-    title:
-      "Concept 2: How Models Learn (Parameters, loss functions, and gradient descent — demystified)",
-    readingMinutes: 9,
-    summary:
-      "If 'Machine Learning' is the paradigm of learning from examples, how exactly does that math work? At its core, an ML model is a complex mathematical equation with millions or billions of adjustable knobs called parameters. Training a model means systematically turning those knobs until the model's predictions stop being wrong. The measurement of 'how wrong it is' is the loss function, and the method for turning the knobs in the right direction is gradient descent.",
-    keyTakeaway:
-      "Models learn through a repetitive loop of predicting, measuring the error (loss), and adjusting their internal math (parameters) to reduce that error. Training is simply error-minimization at scale.",
-    pmCallout:
-      "As a PM, understanding the 'Loss Function' is your superpower. The Loss Function is the mathematical translation of your product goal. If you tell the model to minimize 'clicks to purchase', it will optimize for that, even if it means recommending sensationalist junk. You don't write the gradient descent code, but you must own the definition of the Loss Function.",
-    body: [
-      {
-        kind: "p",
-        parts: [
-          s(
-            "When an engineer says they are 'building a model', they are essentially setting up a giant mathematical equation. This equation takes an input (like an image or a spreadsheet row) and produces an output (like 'is a hotdog' or 'will churn'). ",
-          ),
-          x(
-            "Inside this equation are adjustable numbers called parameters or weights.",
-            "Imagine a massive soundboard with billions of volume sliders. Each slider changes how the input flows through the equation. Before training begins, these sliders are set to random positions, meaning the model's initial predictions are total garbage.",
-          ),
-          s(
-            " The 'intelligence' of the model is stored entirely in the final positions of these sliders. When you hear about GPT-4 having a trillion parameters, it just means the equation has a trillion adjustable sliders.",
-          ),
-        ],
-      },
-      {
-        kind: "p",
-        parts: [
-          s(
-            "If the model starts with random parameters, how does it get smarter? It needs a way to know exactly how wrong its current predictions are. This is the job of the Loss Function. ",
-          ),
-          x(
-            "The Loss Function compares the model's prediction to the actual correct answer (the label), and outputs a single number: the 'Loss'.",
-            "If the model predicts a user will churn with 99% confidence, and the user actually stays, the Loss is huge. If the model predicts 10% churn and they stay, the Loss is small.",
-          ),
-          s(
-            " This is where product management intersects with deep math. The model blindly tries to drive the Loss number to zero. If you define your Loss Function to penalize false positives and false negatives equally, the model will treat them equally—even if a false positive costs your business $10 and a false negative costs $10,000. You must align the math with your business reality.",
-          ),
-        ],
-      },
-      {
-        kind: "p",
-        parts: [
-          s(
-            "Now the model knows it is wrong. How does it know which of its billions of parameters to adjust, and in what direction? ",
-          ),
-          x(
-            "It uses calculus to perform a process called Gradient Descent. The algorithm calculates the 'gradient' (the slope) of the error with respect to every single parameter.",
-            "Think of the model as a blindfolded hiker trying to find the bottom of a valley. They feel the ground with their feet to figure out which way is downhill, take a step in that direction, and repeat. Each 'step' is a tiny adjustment to the parameters.",
-          ),
-          s(
-            " This is why training takes massive amounts of compute and GPUs. For every piece of training data, the model predicts, calculates the loss, and computes the slope for billions of parameters to take one tiny step downhill. It repeats this millions of times until it reaches the bottom of the valley (minimum error).",
-          ),
-        ],
-      },
-      {
-        kind: "p",
-        parts: [
-          s(
-            "The training process (gradient descent) is incredibly expensive and slow. But once the model hits the bottom of the valley, training is over. The parameters are locked in place. ",
-          ),
-          x(
-            "Using the locked model to make new predictions in the real world is called 'Inference'.",
-            "During inference, there is no backpropagation, no gradient descent, and no learning. The data just flows through the fixed equation. This is why using ChatGPT (inference) takes seconds, but building ChatGPT (training) took months and millions of dollars.",
-          ),
-          s(
-            " As a PM, remember that models in production do not 'learn' on the fly from user interactions unless you explicitly design a feedback loop that saves that data for a future re-training run.",
-          ),
-        ],
-      },
-    ],
-    examples: [
-      {
-        title: "The 'Clickbait' Loss Function Problem",
-        body: "Scenario: A PM at a video platform wants a recommendation model to show users videos they like. They tell the data science team to optimize for 'watch time'.\n\nResult: The Loss Function penalizes the model when a user stops watching. The model quickly learns through gradient descent that conspiracy theories and outrage content maximize watch time. The model successfully minimized its loss, but destroyed the product experience. The PM should have defined the Loss Function to include user satisfaction metrics.",
-      },
-      {
-        title: "Gradient Descent in House Pricing",
-        body: "Scenario: Predicting the price of a house. The parameters are the multipliers for square footage, number of bathrooms, and age.\n\nResult: On day one, the model randomly guesses a multiplier of $10 per sq ft. It predicts a 2,000 sq ft house is $20,000. The real price is $200,000. The Loss is huge. Gradient descent calculates the slope, realizes it needs to increase the multiplier, and nudges it to $20. It repeats this against historical data until it settles on the optimal $100 per sq ft.",
-      },
-      {
-        title: "Training vs Inference Costs",
-        body: "Scenario: A startup wants to build a custom language model.\n\nResult: Training the model requires renting 1,000 GPUs for a month to perform the quadrillions of gradient descent calculations required to adjust the parameters. This costs $2 million. However, once deployed for *inference*, the parameters are frozen. It only requires 1 GPU to run the math forward and serve predictions to users in real-time, costing just a few dollars an hour.",
-      },
-    ],
-    quiz: [
-      {
-        q: "What is a 'parameter' or 'weight' in a Machine Learning model?",
-        options: [
-          "The historical data used to train the model.",
-          "An adjustable numerical value inside the model's equation that gets tuned during training.",
-          "The code written by engineers to define business rules.",
-          "The final output prediction of the model.",
-        ],
-        correct: 1,
-        correctFeedback:
-          "Correct! The intelligence of a trained model is physically stored as the final, tuned values of these parameters.",
-        wrongFeedback:
-          "Look for the answer that describes a 'tunable' piece of the model's internal math.",
-      },
-      {
-        q: "Why should a Product Manager care deeply about the Loss Function?",
-        options: [
-          "Because the PM needs to write the calculus code for gradient descent.",
-          "Because it determines how fast the model runs in production.",
-          "Because the Loss Function is the mathematical translation of the product's goal—if it misaligns with business value, the model will confidently optimize for the wrong thing.",
-          "Because it determines whether to use ML or Deep Learning.",
-        ],
-        correct: 2,
-        correctFeedback:
-          "Exactly. The model blindly minimizes the Loss Function. Defining what constitutes an error is fundamentally a product and business decision.",
-        wrongFeedback:
-          "Think about how the Loss Function dictates what the model *cares* about optimizing.",
-      },
-      {
-        q: "Once an ML model is deployed to production and users are interacting with it (Inference), is it constantly updating its parameters in real-time using Gradient Descent?",
-        options: [
-          "Yes, models learn continuously from every interaction.",
-          "No, inference just passes data through locked parameters. Learning only happens during dedicated training runs.",
-          "Yes, but only for Deep Learning models.",
-          "No, but it updates its parameters once a day automatically.",
-        ],
-        correct: 1,
-        correctFeedback:
-          "Spot on. Inference is just running the math forward. To make the model smarter, you have to collect new data and do a whole new training run.",
-        wrongFeedback:
-          "Remember that updating parameters is incredibly expensive and is called 'training'.",
-      },
-    ],
-  },
   {
     slug: "ai-vs-ml-vs-deep-learning",
     number: 8,
@@ -425,6 +298,14 @@ export const concepts: Concept[] = [
         ],
       },
       {
+        kind: "diagram",
+        id: "ch1-dl-flow",
+        type: "flow",
+        title: "Feature Extraction in Deep Learning",
+        caption:
+          "Deep learning models automatically build complex concepts from simple ones by passing data through sequential hidden layers, removing the need for human engineers to hand-label features.",
+      },
+      {
         kind: "p",
         parts: [
           s("The business consequence is a fundamental change in what is buildable. "),
@@ -493,6 +374,14 @@ export const concepts: Concept[] = [
       {
         kind: "why",
         text: "In your next architecture review, when a staff engineer says 'this is ML but it's not deep learning', the look on their face will tell you whether you reacted in a way that earned the next ten minutes of their attention. The hierarchy is the price of admission to those conversations.",
+      },
+      {
+        kind: "diagram",
+        id: "ch1-ai-hierarchy",
+        type: "nested",
+        title: "The AI, ML, and DL Hierarchy",
+        caption:
+          "Every deep learning system is machine learning, and every machine learning system is AI, but the reverse is never true.",
       },
       {
         kind: "p",
@@ -606,6 +495,14 @@ export const concepts: Concept[] = [
             " A learned system has no explicit rules. It has a trained model — a pile of weights — that maps inputs to outputs. The 'rules' are implicit and statistical, and they shift every time the model is retrained.",
           ),
         ],
+      },
+      {
+        kind: "diagram",
+        id: "ch1-paradigm-shift",
+        type: "comparison",
+        title: "The Paradigm Shift in Software Engineering",
+        caption:
+          "Traditional software requires a human to explicitly write the rules; machine learning requires a human to provide the correct answers so the algorithm can discover the rules.",
       },
       {
         kind: "p",
@@ -865,6 +762,732 @@ export const concepts: Concept[] = [
           "Exactly. Model vs. rules, training data and evaluation, retraining and failure handling — those three, in order, expose almost every gap between an AI pitch and an AI product. The questions are free to ask and expensive to skip.",
         wrongFeedback:
           "The diagnostic isn't about speed, cloud, or which LLM is under the hood — it's about whether anything is being learned, whether anyone is measuring it, and whether it stays accurate as the world changes. Re-read section 1.6.",
+      },
+    ],
+  },
+  {
+    slug: "pm-how-models-learn",
+    number: 2,
+    shortTitle: "How Models Learn",
+    title: "How Models Learn",
+    readingMinutes: 20,
+    summary: "Parameters, loss functions, and gradient descent — demystified.",
+    keyTakeaway:
+      "Training is the process of adjusting parameters to minimize the loss function using gradient descent.",
+    pmCallout: "When the model fails to generalize, your job is to fix the data, not the code.",
+    examples: [],
+    body: [
+      {
+        kind: "h3",
+        title: "What is a parameter (weight)",
+        subtitle: "2.1: What is a parameter (weight)",
+      },
+      {
+        kind: "take",
+        text: 'Parameters are the internal settings a model adjusts during training; they are the learned "knowledge" of the system, not hand-coded logic.',
+      },
+      {
+        kind: "why",
+        text: "When a vendor quotes you for fine-tuning, they are charging you to adjust these billions of knobs using your proprietary data. If your data isn't clean, you are paying to turn the knobs in the wrong direction.",
+      },
+      {
+        kind: "p",
+        parts: [
+          "Walk into a server room hosting a modern large language model and you won't find a database of facts or a hard drive full of rules. Instead, you'll find an enormous matrix of decimal numbers that define exactly how the model reacts to any input it receives. ",
+          {
+            text: "A parameter, or weight, is simply a numerical value inside the model that determines how much importance to give to a specific piece of input data.",
+            explain: "This concept is a core mechanism of how models function under the hood.",
+          },
+          " Think of them as billions of tiny volume knobs on an audio mixer, where every knob controls the signal passing from one artificial neuron to the next. ",
+          {
+            text: "When we say a model 'learns,' we literally mean it is twisting these billions of knobs up and down until the output matches what we want to see.",
+            explain: "This concept is a core mechanism of how models function under the hood.",
+          },
+        ],
+      },
+      {
+        kind: "p",
+        parts: [
+          "In a traditional software application, an engineer writes logic that dictates how the system behaves. ",
+          {
+            text: "In a machine learning system, the logic is replaced by the configuration of these parameters, which the system discovers for itself through trial and error.",
+            explain: "This concept is a core mechanism of how models function under the hood.",
+          },
+          ' If the model is trying to detect fraudulent transactions, one parameter might strongly amplify the signal from the "account age" feature, while another suppresses the signal from the "transaction amount" feature. The total behaviour of the model is the sum of billions of these microscopic amplifications and suppressions. ',
+          {
+            text: "This is why modern AI systems are so difficult to audit; their decision-making process is smeared across billions of individual numbers rather than neatly organized in a readable script.",
+            explain: "This concept is a core mechanism of how models function under the hood.",
+          },
+        ],
+      },
+      {
+        kind: "p",
+        parts: [
+          'The business consequence of this architecture is that parameters are the actual asset you are building or buying. When OpenAI releases a "70 billion parameter model," the "70 billion" refers to the sheer number of these adjustable knobs, which directly correlates to the model\'s capacity to learn complex patterns. ',
+          {
+            text: "However, more parameters also mean higher computational costs to run the model in production, leading to a direct trade-off between the model's intelligence and your cloud hosting bill.",
+            explain: "This concept is a core mechanism of how models function under the hood.",
+          },
+          " A massive model might give you better text summaries, but it will cost you significantly more per API call than a smaller model with fewer parameters.",
+        ],
+      },
+      {
+        kind: "p",
+        parts: [
+          "What a PM does differently now is treat model size and parameter count as a core constraint in the product spec. You don't just ask for the smartest model available; you ask for a model whose parameter count aligns with your latency requirements and unit economics. ",
+          {
+            text: "If you are building a real-time autocomplete feature, you cannot afford the latency of a massive parameter model, and must instead scope a smaller model that runs fast enough to be useful.",
+            explain: "This concept is a core mechanism of how models function under the hood.",
+          },
+          " You must also recognize that fine-tuning is literally the process of updating these parameters, which permanently alters the model's behavior based on the examples you provide.",
+        ],
+      },
+      {
+        kind: "ex",
+        title: "Spotify's Audio Profiles",
+        body: 'Spotify\'s recommendation engine uses millions of parameters to represent the acoustic characteristics of songs. One parameter might loosely correlate with "acousticness," while another correlates with "danceability," but they are just numbers discovered during training. The product team cannot easily manually tweak a specific parameter to fix a bad recommendation, highlighting the opaque nature of learned weights.',
+      },
+      {
+        kind: "ex",
+        title: "Meta's Llama 3 Releases",
+        body: "Meta releases its open-source language models in different sizes, such as 8B (8 billion parameters) and 70B (70 billion parameters). Product teams choose the 8B model for fast, cheap tasks deployed on mobile devices, and the 70B model for complex reasoning on cloud servers. The parameter count is the primary lever PMs pull to balance capability against cost.",
+      },
+      {
+        kind: "ex",
+        title: "Grammarly's Tone Detection",
+        body: "Grammarly's tone classifier relies on a specific set of parameters that map word combinations to emotional states. When they update the model to better understand sarcastic tones, they are updating the underlying parameter values through new training data, not writing new rules for sarcasm. This means improvements are data-driven rather than engineering-driven.",
+      },
+      {
+        kind: "trans",
+        text: "Before the model can twist these billions of knobs into the right configuration, it first needs a mathematical way to realize that it's making a mistake.",
+      },
+      { kind: "h3", title: "What is a loss function", subtitle: "2.2: What is a loss function" },
+      {
+        kind: "take",
+        text: "The loss function is the mathematical definition of a mistake; it tells the model exactly how wrong its current prediction is so it can adjust.",
+      },
+      {
+        kind: "why",
+        text: 'If you don\'t explicitly define what a "mistake" is for your product, the engineering team will choose a default metric that might optimize for the wrong behavior. You must align the loss function with your actual business goals.',
+      },
+      {
+        kind: "p",
+        parts: [
+          "Imagine shooting an arrow at a target while blindfolded, and a coach yelling out exactly how many inches wide you missed the bullseye. That coach is the loss function. ",
+          {
+            text: "A loss function is a mathematical formula that calculates the difference between what the model predicted and what the correct answer actually is.",
+            explain: "This concept is a core mechanism of how models function under the hood.",
+          },
+          " If a model predicts a house will sell for $400,000 and it actually sells for $500,000, the loss function calculates a massive penalty. ",
+          {
+            text: "The entire goal of the training process is to minimize this penalty, driving the loss as close to zero as possible over millions of examples.",
+            explain: "This concept is a core mechanism of how models function under the hood.",
+          },
+        ],
+      },
+      {
+        kind: "p",
+        parts: [
+          "You cannot train a model without explicitly telling it what failure looks like. ",
+          {
+            text: "Because models are blind optimization engines, they will relentlessly optimize whatever metric the loss function defines, even if it leads to absurd outcomes in the real product.",
+            explain: "This concept is a core mechanism of how models function under the hood.",
+          },
+          " If you train a spam filter and the loss function equally penalizes missing a spam email and accidentally blocking a legitimate email, the model will treat both errors as identical. ",
+          {
+            text: "In reality, blocking a legitimate email is a catastrophic user experience, so the loss function must be weighted heavily to punish false positives more than false negatives.",
+            explain: "This concept is a core mechanism of how models function under the hood.",
+          },
+        ],
+      },
+      {
+        kind: "p",
+        parts: [
+          "The business consequence is that the loss function encodes the product's values and trade-offs into the core algorithm. A model trained to maximize watch time on a video platform will learn to promote increasingly extreme content, because extreme content keeps users engaged. ",
+          {
+            text: "The model isn't malicious; it is simply driving its loss function to zero as efficiently as possible, completely blind to the secondary effects on the platform's ecosystem.",
+            explain: "This concept is a core mechanism of how models function under the hood.",
+          },
+          " Changing the behavior of the system usually requires rewriting the loss function to include penalties for toxic content or clickbait, rather than just tweaking the UI.",
+        ],
+      },
+      {
+        kind: "p",
+        parts: [
+          "What a PM does differently now is participate directly in the design of the loss function. You don't write the math, but you define the penalty weights for different types of errors. ",
+          {
+            text: "If you are launching a medical diagnostic tool, you must explicitly instruct engineering that a false negative (missing a disease) carries a much higher penalty in the loss function than a false positive (a false alarm).",
+            explain: "This concept is a core mechanism of how models function under the hood.",
+          },
+          " You must also constantly monitor whether minimizing the loss function in training is actually translating into better user outcomes in production, or if the model has found a loophole.",
+        ],
+      },
+      {
+        kind: "ex",
+        title: "YouTube's Recommendation Algorithm",
+        body: 'YouTube originally optimized its models purely for clicks, leading to an explosion of clickbait thumbnails because the loss function rewarded clicks above all else. They eventually had to change the loss function to optimize for "watch time" and later "user satisfaction," proving that whatever you measure is exactly what the model will deliver.',
+      },
+      {
+        kind: "ex",
+        title: "Uber's ETA Predictions",
+        body: "Uber's ETA models use a loss function that penalizes underestimating a trip duration slightly more than overestimating it. From a product perspective, a user is much angrier if a ride takes five minutes longer than promised than if it arrives five minutes early. The loss function mathematically encodes this human psychology.",
+      },
+      {
+        kind: "ex",
+        title: "Stripe Radar's Fraud Detection",
+        body: "Stripe's fraud models must balance catching fraudulent charges against blocking legitimate transactions. The loss function is carefully tuned because a false positive (blocking a good customer) damages merchant trust immediately. The product team ensures the loss function aligns with the acceptable risk tolerance for different merchant categories.",
+      },
+      {
+        kind: "trans",
+        text: "With the penalty defined, the model needs a way to actually generate a prediction and see how it performs.",
+      },
+      { kind: "h3", title: "Forward pass explained", subtitle: "2.3: Forward pass explained" },
+      {
+        kind: "take",
+        text: "A forward pass is the act of pushing data through the model's layers to generate a single prediction; it is the fundamental action of inference.",
+      },
+      {
+        kind: "why",
+        text: "Every forward pass costs compute, money, and time. When scoping latency requirements for a real-time feature, you are directly dictating how fast the forward pass must execute.",
+      },
+      {
+        kind: "p",
+        parts: [
+          "To see the loss function in action, the model first has to make a guess. ",
+          {
+            text: "A forward pass is the process where raw input data enters the model, flows through the network of parameters, and emerges on the other side as a final prediction.",
+            explain: "This concept is a core mechanism of how models function under the hood.",
+          },
+          ' When you upload an image of a dog to an AI classifier, the pixels flow through the first layer of parameters to detect edges, then the next layer to detect shapes, until the final layer outputs the word "dog." ',
+          {
+            text: "During a forward pass, the model is simply applying its current knowledge; it is not learning or updating its parameters at all.",
+            explain: "This concept is a core mechanism of how models function under the hood.",
+          },
+        ],
+      },
+      {
+        kind: "p",
+        parts: [
+          "This unidirectional flow of data is the operational heartbeat of every machine learning system in production. ",
+          {
+            text: "When a user interacts with your AI feature, they are triggering a forward pass, and the time it takes for the data to travel through the network is the latency the user experiences.",
+            explain: "This concept is a core mechanism of how models function under the hood.",
+          },
+          " In a deep neural network with hundreds of layers, the data must be mathematically multiplied against billions of parameters before a result is produced. ",
+          {
+            text: "Because these calculations are so heavy, forward passes require specialized hardware like GPUs to execute quickly enough for consumer applications.",
+            explain: "This concept is a core mechanism of how models function under the hood.",
+          },
+        ],
+      },
+      {
+        kind: "p",
+        parts: [
+          "The business consequence is that the computational cost of your product scales linearly with the number of forward passes it performs. If you build a feature that predicts text as the user types, you are triggering a forward pass on every single keystroke. ",
+          {
+            text: "This architecture can quickly bankrupt a startup if the unit economics of the forward pass exceed the revenue generated by the user's session.",
+            explain: "This concept is a core mechanism of how models function under the hood.",
+          },
+          " Optimization techniques like caching, batching requests, or using smaller models are all strategies designed to reduce the sheer cost of running forward passes at scale.",
+        ],
+      },
+      {
+        kind: "p",
+        parts: [
+          "What a PM does differently now is treat the forward pass as a budgeted resource. You must define the acceptable latency for the user experience and work backward to determine what size model the engineering team can deploy. ",
+          {
+            text: "You will also make product decisions to minimize unnecessary forward passes, such as waiting for the user to pause typing before triggering the autocomplete model, rather than predicting on every character.",
+            explain: "This concept is a core mechanism of how models function under the hood.",
+          },
+          " By understanding that every prediction is a discrete, expensive calculation, you stop treating AI as magic and start managing it as infrastructure.",
+        ],
+      },
+      {
+        kind: "ex",
+        title: "GitHub Copilot's Debouncing",
+        body: "GitHub Copilot doesn't trigger a forward pass for every single character a developer types, because the compute costs would be astronomical and the UI would flicker wildly. Instead, the product uses debouncing—waiting for a brief pause in typing—before initiating the forward pass to generate the code suggestion, saving massive amounts of compute.",
+      },
+      {
+        kind: "ex",
+        title: "Apple's FaceID",
+        body: "FaceID relies on a localized forward pass running directly on the iPhone's internal neural engine. The product requirement was that the forward pass had to execute in a fraction of a second without draining the battery or requiring an internet connection. This strict latency constraint forced the engineering team to design an incredibly lightweight model.",
+      },
+      {
+        kind: "ex",
+        title: "Netflix's Batch Inference",
+        body: "Netflix generates personalized movie recommendations for millions of users, but they do not run the forward pass in real-time when you log in. Instead, they run forward passes in massive batches overnight when compute is cheap, caching the results so the UI loads instantly the next day. This architectural choice decouples the forward pass from the user's session.",
+      },
+      {
+        kind: "trans",
+        text: "Once the forward pass generates a prediction, and the loss function measures the mistake, the model must finally correct itself.",
+      },
+      {
+        kind: "h3",
+        title: "Backpropagation explained",
+        subtitle: "2.4: Backpropagation explained",
+      },
+      {
+        kind: "take",
+        text: "Backpropagation is the feedback loop that calculates exactly how much each parameter contributed to an error, allowing the model to learn.",
+      },
+      {
+        kind: "why",
+        text: 'Understanding backpropagation reveals why training is so much more expensive and complex than inference. It explains why you can\'t just "teach the model a new rule" in real-time.',
+      },
+      {
+        kind: "p",
+        parts: [
+          "If the forward pass is the model taking a test, backpropagation is the teacher grading the test and showing the model exactly where it went wrong. ",
+          {
+            text: "Backpropagation is the algorithm that traces an error backwards through the network to determine which specific parameters were responsible for the mistake.",
+            explain: "This concept is a core mechanism of how models function under the hood.",
+          },
+          " After the loss function calculates the total error, backpropagation acts like a forensic investigator, moving in reverse from the final output layer all the way back to the input layer. ",
+          {
+            text: "It assigns a slice of the blame to every single parameter that played a role in generating the incorrect prediction.",
+            explain: "This concept is a core mechanism of how models function under the hood.",
+          },
+        ],
+      },
+      {
+        kind: "p",
+        parts: [
+          "This reverse journey requires storing the intermediate states of the entire network during the forward pass. ",
+          {
+            text: "Because it has to track the mathematical derivatives for billions of connections simultaneously, backpropagation is massively memory-intensive and computationally heavy.",
+            explain: "This concept is a core mechanism of how models function under the hood.",
+          },
+          " If a neuron incorrectly amplified a signal that led to a false positive, backpropagation calculates exactly how much that specific volume knob needs to be turned down to prevent the same mistake next time. ",
+          {
+            text: "This is the actual mechanism of 'learning'—the meticulous, systemic assignment of blame and correction across the entire matrix.",
+            explain: "This concept is a core mechanism of how models function under the hood.",
+          },
+        ],
+      },
+      {
+        kind: "p",
+        parts: [
+          "The business consequence is the stark division between the cost of training a model and the cost of running it. Training requires constant backpropagation, consuming clusters of expensive GPUs running for weeks or months. ",
+          {
+            text: "Inference—using the model in your product—only requires the forward pass, which is drastically cheaper and faster because it doesn't need to assign blame or update weights.",
+            explain: "This concept is a core mechanism of how models function under the hood.",
+          },
+          " This is why foundational models are trained by a handful of tech giants with massive capital, while thousands of startups can afford to run inference on those models via APIs.",
+        ],
+      },
+      {
+        kind: "p",
+        parts: [
+          "What a PM does differently now is stop expecting real-time, continuous learning from production models. Because backpropagation is so heavy, models do not dynamically update their parameters live while users interact with them. ",
+          {
+            text: "When a user flags a bad output, you cannot simply correct the model on the fly; that feedback must be collected, curated, and fed into a scheduled retraining pipeline where backpropagation can be run offline.",
+            explain: "This concept is a core mechanism of how models function under the hood.",
+          },
+          " You must design your product's feedback loops to capture data for the next training cycle, rather than promising users that the system will instantly learn from their corrections.",
+        ],
+      },
+      {
+        kind: "ex",
+        title: "ChatGPT's Thumbs Down Button",
+        body: "When you click the thumbs down button on a bad ChatGPT response, the model does not instantly learn from your feedback. That feedback is stored in a database and curated by OpenAI engineers. It will eventually be used in a massive, offline backpropagation run (reinforcement learning from human feedback) to update the model weeks or months later.",
+      },
+      {
+        kind: "ex",
+        title: "Tesla's Shadow Mode",
+        body: 'Tesla vehicles constantly run autopilot models in "shadow mode," making predictions without taking control. When a human driver intervenes and does something different than the model predicted, the discrepancy is logged. This data is sent back to Tesla\'s servers, where heavy backpropagation is run offline to update the global model for the next fleet-wide software update.',
+      },
+      {
+        kind: "ex",
+        title: "Midjourney's Image Generation",
+        body: "When Midjourney generates an image that perfectly matches a prompt, the forward pass is incredibly fast. However, teaching the model to understand new artistic styles requires backpropagation across billions of images. The separation of these processes allows Midjourney to serve millions of users quickly while handling the heavy lifting of learning in massive private data centers.",
+      },
+      {
+        kind: "trans",
+        text: "With backpropagation calculating the blame, the model relies on a specific mathematical strategy to actually turn the volume knobs in the right direction.",
+      },
+      {
+        kind: "h3",
+        title: "Gradient descent without the math",
+        subtitle: "2.5: Gradient descent without the math",
+      },
+      {
+        kind: "take",
+        text: "Gradient descent is the directional compass the model uses to incrementally update its parameters and find the lowest possible error.",
+      },
+      {
+        kind: "why",
+        text: "Gradient descent guarantees the model will try to find a solution, but it doesn't guarantee it will find the best one. If your training stalls or the model gets stuck, this is the mechanism that is failing.",
+      },
+      {
+        kind: "p",
+        parts: [
+          "Imagine you are blindfolded and dropped onto the side of a mountain, and your only goal is to find the lowest point in the valley. You cannot see the landscape, so you feel the ground with your feet, take a step in the direction that goes downhill, and repeat. ",
+          {
+            text: "Gradient descent is exactly this process: a step-by-step mathematical algorithm that constantly nudges the model's parameters in the direction that reduces the error.",
+            explain: "This concept is a core mechanism of how models function under the hood.",
+          },
+          ' The "gradient" is simply the slope of the hill, representing how steeply the error is increasing or decreasing. ',
+          {
+            text: "By always moving opposite to the gradient—stepping downhill—the model incrementally approaches the optimal configuration where the loss is minimized.",
+            explain: "This concept is a core mechanism of how models function under the hood.",
+          },
+        ],
+      },
+      {
+        kind: "p",
+        parts: [
+          "The size of the step you take down the mountain is critical, and in machine learning, this is called the learning rate. ",
+          {
+            text: "If the learning rate is too small, the model takes microscopic steps and training takes forever to reach the bottom.",
+            explain: "This concept is a core mechanism of how models function under the hood.",
+          },
+          " Conversely, if the learning rate is too large, the model takes massive leaps, potentially overshooting the lowest point entirely and bouncing around the walls of the valley. ",
+          {
+            text: "Tuning the learning rate is one of the most delicate parts of training a model, requiring constant adjustment by engineers to ensure gradient descent converges smoothly.",
+            explain: "This concept is a core mechanism of how models function under the hood.",
+          },
+        ],
+      },
+      {
+        kind: "p",
+        parts: [
+          "The business consequence is that training is an empirical, highly unpredictable process rather than a deterministic compilation. When you compile traditional software, it either works or throws an error instantly. ",
+          {
+            text: "When you run gradient descent, the model might get trapped in a 'local minimum'—a small dip on the side of the mountain—believing it has reached the bottom when a much better solution exists elsewhere.",
+            explain: "This concept is a core mechanism of how models function under the hood.",
+          },
+          " Engineering teams can spend weeks burning expensive compute resources only to realize gradient descent has plateaued prematurely, requiring them to restart the process with different hyperparameter settings.",
+        ],
+      },
+      {
+        kind: "p",
+        parts: [
+          "What a PM does differently now is build buffer time into roadmap estimates for model training. You cannot treat training a model like an overnight build process; it is an experimental search that frequently fails or stalls. ",
+          {
+            text: "When engineering says the model 'isn't converging,' they mean gradient descent is stuck, and you must protect their time to debug the learning rate or dataset rather than demanding an immediate release.",
+            explain: "This concept is a core mechanism of how models function under the hood.",
+          },
+          " You learn to ask for regular updates on the training loss curve, ensuring the team is actually making progress down the mountain before promising the feature to marketing.",
+        ],
+      },
+      {
+        kind: "ex",
+        title: "OpenAI's Training Runs",
+        body: "During the development of large models like GPT-4, OpenAI uses massive clusters of GPUs to run gradient descent for months at a time. Because a single training run can cost tens of millions of dollars, getting stuck in a local minimum is a catastrophic financial risk. They employ specialized teams dedicated entirely to monitoring the learning rate and ensuring the descent is stable.",
+      },
+      {
+        kind: "ex",
+        title: "Pinterest's Visual Search",
+        body: "When Pinterest trains its visual search models to recognize similar objects, gradient descent is used to adjust the weights so that images of identical items are grouped closely together in the mathematical space. If the learning rate is misconfigured, the model might abruptly collapse and start grouping everything together, forcing the team to halt the run and revert to an earlier checkpoint.",
+      },
+      {
+        kind: "ex",
+        title: "Duolingo's Spaced Repetition",
+        body: "Duolingo uses a model to predict the probability that a user will remember a specific word. They train this model using gradient descent to minimize the difference between predicted recall and actual user performance. If the model fails to converge, users might be shown words too frequently or too rarely, directly impacting the core learning experience and retention metrics.",
+      },
+      {
+        kind: "diagram",
+        id: "ch2-training-loop",
+        type: "flow",
+        title: "The Training Loop",
+        caption: "How the four components work together to iteratively improve the model.",
+      },
+      {
+        kind: "trans",
+        text: "Taking one step down the mountain isn't enough; the model must repeat this process millions of times over the entire dataset.",
+      },
+      { kind: "h3", title: "Epochs and iterations", subtitle: "2.6: Epochs and iterations" },
+      {
+        kind: "take",
+        text: "An epoch is one full pass through the entire training dataset; training requires many epochs for the model to fully absorb the patterns.",
+      },
+      {
+        kind: "why",
+        text: "The number of epochs dictates how long training takes and how much compute it burns. You have to balance the need for a smarter model against the sheer cost of looping through the data repeatedly.",
+      },
+      {
+        kind: "p",
+        parts: [
+          "Reading a textbook once rarely guarantees you will ace the final exam; you usually have to read it multiple times for the concepts to stick. ",
+          {
+            text: "In machine learning, an epoch represents one complete pass of the entire training dataset through the model.",
+            explain: "This concept is a core mechanism of how models function under the hood.",
+          },
+          " If you are training a fraud detector on one million historical transactions, the model completes one epoch only after it has looked at all one million examples, made predictions, and updated its parameters via backpropagation. ",
+          {
+            text: "Because one pass is rarely enough to find the bottom of the valley, models are typically trained over dozens or hundreds of epochs to solidify their understanding.",
+            explain: "This concept is a core mechanism of how models function under the hood.",
+          },
+        ],
+      },
+      {
+        kind: "p",
+        parts: [
+          "Waiting to update the model until after it has seen all one million examples is incredibly slow, so datasets are broken down into smaller chunks called batches. ",
+          {
+            text: "An iteration is the process of passing a single batch of data through the model and updating the parameters.",
+            explain: "This concept is a core mechanism of how models function under the hood.",
+          },
+          " If your batch size is one thousand, it will take one thousand iterations to complete a single epoch of the one-million-transaction dataset. ",
+          {
+            text: "This batching process allows the model to update its internal volume knobs frequently and continuously, making gradient descent much more efficient and practical at scale.",
+            explain: "This concept is a core mechanism of how models function under the hood.",
+          },
+        ],
+      },
+      {
+        kind: "p",
+        parts: [
+          "The business consequence is a direct relationship between dataset size, epoch count, and your cloud computing bill. Every additional epoch requires the GPUs to process the entire dataset all over again, multiplying the cost of training. ",
+          {
+            text: "There are diminishing returns: the first few epochs might dramatically improve the model's accuracy, while the fiftieth epoch might only yield a microscopic gain at the exact same financial cost.",
+            explain: "This concept is a core mechanism of how models function under the hood.",
+          },
+          ' Teams must continuously monitor the validation metrics to decide when the model is "good enough," halting the training process before the compute costs exceed the business value of the marginal improvement.',
+        ],
+      },
+      {
+        kind: "p",
+        parts: [
+          'What a PM does differently now is manage the trade-off between training time, cost, and model performance. When an engineer proposes running "more epochs" to improve a struggling model, you must ask what the projected cost of that compute will be. ',
+          {
+            text: "If retraining the model on fresh data takes three days of compute per epoch, you must actively decide whether the slight bump in accuracy is worth delaying a critical product launch.",
+            explain: "This concept is a core mechanism of how models function under the hood.",
+          },
+          " You will also use this terminology to understand the scale of a problem: an error on the tenth iteration is a quick fix, while an error on the hundredth epoch is a massive loss of time and money.",
+        ],
+      },
+      {
+        kind: "ex",
+        title: "Tesla's Fleet Data",
+        body: "Tesla collects petabytes of video data from its fleet of vehicles. Processing this entire dataset represents a massive epoch. Because the dataset is so incomprehensibly large, Tesla cannot afford to run hundreds of epochs, and must rely on incredibly optimized batching and iteration strategies to ensure the model learns efficiently within a reasonable timeframe.",
+      },
+      {
+        kind: "ex",
+        title: "Canva's Background Remover",
+        body: "When Canva trained its automated background removal tool, they passed millions of masked images through the model for multiple epochs. The product team had to evaluate the model after every few epochs, eventually calling a halt to training when the edge-detection accuracy on hair and fur plateaued, avoiding wasting money on further iterations that weren't improving the user experience.",
+      },
+      {
+        kind: "ex",
+        title: "Anthropic's Claude Alignment",
+        body: "During the final stages of training Claude to be helpful and harmless, Anthropic runs the model through specific datasets of sensitive queries. They carefully monitor the model's behavior epoch by epoch to ensure it absorbs the safety constraints. Running too few epochs might leave the model vulnerable, while running too many risks degrading its general conversational ability.",
+      },
+      {
+        kind: "diagram",
+        id: "ch2-epochs-nested",
+        type: "nested",
+        title: "The Data Hierarchy",
+        caption: "An epoch contains multiple batches; processing one batch is one iteration.",
+      },
+      {
+        kind: "trans",
+        text: "However, if you force the model to read the textbook too many times, it stops learning the concepts and simply memorizes the answers.",
+      },
+      {
+        kind: "h3",
+        title: "Overfitting vs underfitting",
+        subtitle: "2.7: Overfitting vs underfitting",
+      },
+      {
+        kind: "take",
+        text: "Overfitting is when a model memorizes the training data but fails on new data; underfitting is when it fails to learn anything useful at all.",
+      },
+      {
+        kind: "why",
+        text: "If you only test a model on the data it was trained on, an overfitted model will look like a perfect success right up until the moment it fails catastrophically in production.",
+      },
+      {
+        kind: "p",
+        parts: [
+          "Think of a student preparing for a math test. An underfitting student glances at the textbook for five minutes, learns nothing, and fails the test. ",
+          {
+            text: "Underfitting occurs when a model is too simple or hasn't trained long enough to capture the underlying patterns in the data, resulting in poor predictions across the board.",
+            explain: "This concept is a core mechanism of how models function under the hood.",
+          },
+          " It is the equivalent of a real estate model guessing that every house costs exactly $300,000 regardless of the neighborhood or square footage. ",
+          {
+            text: "Underfitting is usually obvious early in the development cycle, and the fix is straightforward: use a more complex model or train it for more epochs.",
+            explain: "This concept is a core mechanism of how models function under the hood.",
+          },
+        ],
+      },
+      {
+        kind: "p",
+        parts: [
+          "The far more dangerous scenario is the student who memorizes the exact answers to the practice test but doesn't learn the actual mathematical formulas. ",
+          {
+            text: "Overfitting happens when a model trains so aggressively on the training data that it memorizes the noise, outliers, and exact examples instead of the general patterns.",
+            explain: "This concept is a core mechanism of how models function under the hood.",
+          },
+          " When you give this overfitted model a brand new piece of data it has never seen before, it completely collapses. ",
+          {
+            text: "An overfitted model will score 99% accuracy in the lab and then fail spectacularly the moment it is deployed to real users, making it the most deceptive trap in machine learning.",
+            explain: "This concept is a core mechanism of how models function under the hood.",
+          },
+        ],
+      },
+      {
+        kind: "p",
+        parts: [
+          "The business consequence of overfitting is a false sense of security that leads to disastrous product launches. An overfitted algorithmic trading model will backtest perfectly on historical stock data, convincing the company to deploy millions of dollars, only to lose everything when the live market behaves slightly differently. ",
+          {
+            text: "To prevent this, teams must withhold a portion of the data—called the validation set—and never let the model see it during training.",
+            explain: "This concept is a core mechanism of how models function under the hood.",
+          },
+          " The model's true performance is only ever judged by how well it predicts the validation set, ensuring you are measuring real intelligence rather than mere memorization.",
+        ],
+      },
+      {
+        kind: "p",
+        parts: [
+          "What a PM does differently now is rigorously interrogate the evaluation methodology before approving a launch. You must never accept an accuracy metric without asking what dataset was used to generate it. ",
+          {
+            text: "If the engineering team reports that the model is 95% accurate, your immediate follow-up must be: 'Is that on the training set or the held-out validation set?'",
+            explain: "This concept is a core mechanism of how models function under the hood.",
+          },
+          " You must also ensure that the validation set is truly representative of the messy, unpredictable data the model will encounter in the real world, acting as the final line of defense against deploying an overfitted disaster.",
+        ],
+      },
+      {
+        kind: "ex",
+        title: "Zillow's iBuying Collapse",
+        body: "Zillow's algorithm for predicting home prices suffered from a form of overfitting to historical market trends. The model learned the precise patterns of a stable housing market and performed beautifully in backtests. However, when the market dynamics shifted during the pandemic, the overfitted model failed to generalize to the new reality, resulting in massive financial losses and the shutdown of their iBuying division.",
+      },
+      {
+        kind: "ex",
+        title: "Apple's Initial Siri Launch",
+        body: "Early voice recognition systems often overfitted to the specific accents and studio conditions of the actors who recorded the training data. When deployed to the public, the models failed to understand regional dialects, background noise, or mumbled speech. Product teams learned they had to curate vastly more diverse validation sets to ensure the models were actually generalizing to real-world audio.",
+      },
+      {
+        kind: "ex",
+        title: "Netflix's Recommendation Challenge",
+        body: "When Netflix ran its famous million-dollar algorithm competition, many teams submitted models that perfectly predicted the exact ratings in the training data but failed on the hidden test set. The models had overfitted, memorizing the quirks of specific users rather than learning true genre preferences. Netflix only awarded the prize to the team whose model generalized effectively to the unseen data.",
+      },
+      {
+        kind: "diagram",
+        id: "ch2-fitting-comparison",
+        type: "comparison",
+        title: "The Fitting Spectrum",
+        caption:
+          "Underfitting learns nothing. Overfitting memorizes everything. Optimal fit learns the underlying pattern.",
+      },
+      {
+        kind: "trans",
+        text: "Recognizing an overfitted model is just one part of a broader skill set: diagnosing the root causes of model failure and translating them into actionable product strategy.",
+      },
+    ],
+    quiz: [
+      {
+        q: 'A vendor tells you they are "fine-tuning a 70 billion parameter model" on your company\'s internal wiki. What are they actually doing technically?',
+        options: [
+          "Writing 70 billion new rules to govern how the wiki is searched.",
+          "Adjusting billions of numerical weights inside the model so it statistically favors patterns found in your wiki.",
+          "Expanding the model's database to store exact copies of your wiki pages.",
+          "Upgrading the cloud hardware to support 70 billion simultaneous API requests.",
+        ],
+        correct: 0, // 0-indexed
+        correctFeedback:
+          "Exactly. Fine-tuning is the process of updating the model's internal parameters (weights) using your proprietary data. It changes the statistical behavior of the model, rather than storing facts in a database.",
+        wrongFeedback:
+          "Remember that parameters are not rules, hardware, or database entries. They are the numerical knobs that determine the model's behavior. Re-read section 2.1.",
+      },
+      {
+        q: "Your team is building an AI moderation tool to automatically delete toxic comments. Engineering asks how they should weight the loss function. Which response demonstrates strong product leadership?",
+        options: [
+          '"Make the loss function zero so the model is perfectly accurate."',
+          '"Weight false positives (deleting a good comment) heavier than false negatives (missing a toxic one) because censorship hurts user trust more than spam."',
+          '"The loss function is a back-end engineering detail; just use the default setting."',
+          '"Optimize the loss function to maximize total comments on the platform."',
+        ],
+        correct: 0, // 0-indexed
+        correctFeedback:
+          "Right. The loss function encodes the business trade-offs. By explicitly defining that a false positive is worse than a false negative, you are ensuring the model optimizes for user trust.",
+        wrongFeedback:
+          'The loss function isn\'t just an engineering detail or a goal to zero out without context; it defines what a "mistake" is. Re-read section 2.2 on how loss functions encode product values.',
+      },
+      {
+        q: "Your new generative AI feature is running over budget because the cloud compute costs are astronomical. Which of the following is the direct mechanical cause of this cost?",
+        options: [
+          "The model is stuck in a local minimum during backpropagation.",
+          "Every time a user interacts with the feature, it triggers an expensive forward pass through billions of parameters.",
+          "The loss function is penalizing the wrong metrics.",
+          "The model has overfitted to the training data.",
+        ],
+        correct: 0, // 0-indexed
+        correctFeedback:
+          "Exactly. The forward pass is the action of inference. Pushing data through a massive model in real-time requires heavy compute, which directly drives up your cloud hosting bill.",
+        wrongFeedback:
+          "While backpropagation and loss functions relate to training, the cost of running the feature in production is driven by the forward pass. Re-read section 2.3.",
+      },
+      {
+        q: 'A user reports that the AI summary tool completely hallucinated a fact. They click the "thumbs down" button. Why doesn\'t the model instantly stop making that mistake for the next user?',
+        options: [
+          "Because the model's learning rate is set too low.",
+          "Because the user didn't explain why the fact was wrong in the text box.",
+          "Because updating the model requires backpropagation, which is too computationally heavy to run live on a single piece of feedback.",
+          "Because the forward pass is unidirectional.",
+        ],
+        correct: 1, // 0-indexed
+        correctFeedback:
+          "Right. Backpropagation is the memory-intensive process of assigning blame and updating parameters. It cannot be run on the fly; feedback must be batched for offline training.",
+        wrongFeedback:
+          "The limitation isn't the UI or the learning rate. It's the sheer computational cost of the backpropagation algorithm required to update the weights. Re-read section 2.4.",
+      },
+      {
+        q: 'Engineering tells you the model training has "plateaued early" and they need to restart with a different learning rate. What analogy best describes what happened?',
+        options: [
+          "The model memorized the textbook instead of learning the concepts.",
+          "The model got stuck in a small dip on the side of the mountain (a local minimum) instead of finding the lowest point in the valley.",
+          "The model completed an epoch but the batch size was too large.",
+          "The loss function penalized the wrong behavior.",
+        ],
+        correct: 0, // 0-indexed
+        correctFeedback:
+          "Exactly. Gradient descent is the process of stepping down the mountain to minimize error. If it gets stuck in a local minimum, training stalls prematurely.",
+        wrongFeedback:
+          "Memorizing the textbook is overfitting. A plateau in training means the gradient descent algorithm has stalled before finding the optimal solution. Re-read section 2.5.",
+      },
+      {
+        q: 'To improve the accuracy of a struggling churn-prediction model, the data science lead suggests "running 50 more epochs." As a PM, what is the immediate trade-off you must consider?',
+        options: [
+          "The model will become too simple and underfit the data.",
+          "Running more epochs requires passing the entire dataset through the model 50 more times, which will cost significant time and compute money.",
+          "The forward pass will become too slow for real-time inference.",
+          "The loss function will automatically reset to zero.",
+        ],
+        correct: 0, // 0-indexed
+        correctFeedback:
+          "Right. An epoch is a full pass through the training data. Adding epochs increases training time and compute costs linearly, and you must weigh that against the diminishing returns in accuracy.",
+        wrongFeedback:
+          "Epochs happen during training, not inference, and they don't reset the loss function or make the model simpler. They cost money and time. Re-read section 2.6.",
+      },
+      {
+        q: "A vendor demonstrates a fraud model that achieves 99.9% accuracy in their lab. However, when deployed on your live transaction data, it misses 40% of fraudulent charges. What is the most likely diagnosis?",
+        options: [
+          "The model underfitted, meaning it was too simple to learn anything.",
+          "The model overfitted, memorizing the vendor's specific training data but failing to generalize to your real-world transactions.",
+          "The learning rate was set too high during gradient descent.",
+          "The forward pass is executing too slowly.",
+        ],
+        correct: 0, // 0-indexed
+        correctFeedback:
+          "Exactly. This is the classic trap of overfitting. The model looked perfect in the lab because it memorized the training set, but it collapsed when faced with unseen, real-world data.",
+        wrongFeedback:
+          "Underfitting would mean it performed poorly in the lab as well. The discrepancy between lab performance and real-world failure is the hallmark of overfitting. Re-read section 2.7.",
+      },
+      {
+        q: 'Your computer vision model for a self-driving delivery bot works perfectly in California but constantly crashes into snowbanks in Minnesota. Engineering says "the model isn\'t generalizing." How do you fix this?',
+        options: [
+          "Ask engineering to rewrite the neural network architecture from scratch.",
+          "Source thousands of images of snowbanks, label them correctly, and add them to the training dataset for the next retraining run.",
+          "Increase the learning rate so the model adapts faster in cold weather.",
+          "Reduce the number of parameters to make the forward pass faster.",
+        ],
+        correct: 0, // 0-indexed
+        correctFeedback:
+          "Right. Generalization failures are almost always data failures. The model didn't learn about snow because it wasn't in the training set; the PM's job is to fix the data supply chain.",
+        wrongFeedback:
+          "You cannot fix a generalization failure by tweaking the architecture, learning rate, or parameter count. The model is missing representation in the dataset. Re-read section 2.8. ",
       },
     ],
   },

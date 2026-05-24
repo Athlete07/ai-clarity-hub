@@ -1,9 +1,10 @@
 import { createFileRoute, Link, notFound, useRouter } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import { Nav, Footer } from "@/components/site-nav";
-import { ExampleCard } from "@/components/example-card";
+import { ExampleTabs } from "@/components/example-tabs";
 import { HighlightExplainer } from "@/components/highlight-explainer";
 import { Quiz } from "@/components/quiz";
+import { DiagramBlock } from "@/components/diagrams";
 import {
   concepts,
   conceptBySlug,
@@ -13,6 +14,48 @@ import {
 } from "@/lib/concepts";
 import { useProgress } from "@/lib/storage";
 import { Clock, Hand, Menu, X, Check } from "lucide-react";
+
+function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
+  console.error(error);
+  const router = useRouter();
+
+  return (
+    <div className="flex h-64 flex-col items-center justify-center gap-4 text-center">
+      <div className="rounded-full bg-red-100 p-3 text-red-600">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="8" x2="12" y2="12" />
+          <line x1="12" y1="16" x2="12.01" y2="16" />
+        </svg>
+      </div>
+      <div>
+        <h2 className="text-[16px] font-semibold">Something went wrong</h2>
+        <p className="mt-1 text-[14px] text-muted-foreground max-w-[400px]">
+          There was an error loading this concept. Please try again.
+        </p>
+      </div>
+      <button
+        onClick={() => {
+          router.invalidate();
+          reset();
+        }}
+        className="mt-2 rounded-md bg-foreground px-4 py-2 text-[13px] font-medium text-background transition-colors hover:bg-foreground/90"
+      >
+        Try again
+      </button>
+    </div>
+  );
+}
 
 export const Route = createFileRoute("/playbook/$slug")({
   loader: ({ params }) => {
@@ -84,14 +127,21 @@ function ConceptPage() {
   const next = nextConcept(concept.slug);
   const prev = prevConcept(concept.slug);
 
+  const currentIdx = concepts.findIndex((c) => c.slug === concept.slug);
+  const displayNum = currentIdx + 1;
+
   return (
     <div className="min-h-screen">
+      <div
+        className="fixed top-0 left-0 h-[2px] bg-purple z-50 transition-all duration-300"
+        style={{ width: `${pct}%` }}
+      />
       {/* Slim top nav with progress */}
       <header
         className="sticky top-0 z-40 hairline-b bg-background/85 backdrop-blur"
         style={{ height: 52 }}
       >
-        <div className="mx-auto flex h-full max-w-[1100px] items-center justify-between px-4 sm:px-6">
+        <div className="mx-auto flex h-full max-w-[1400px] items-center justify-between px-4 sm:px-6">
           <div className="flex items-center gap-3">
             <button
               className="rounded-md p-1.5 text-muted-foreground hover:bg-muted lg:hidden"
@@ -107,25 +157,11 @@ function ConceptPage() {
               />
               <span className="text-[15px] font-medium">FactorBeam</span>
             </Link>
-            <Link
-              to="/playbook"
-              className="hidden text-[12px] text-muted-foreground hover:text-foreground sm:inline"
-            >
-              ← All concepts
-            </Link>
-          </div>
-          <div className="flex items-center gap-3">
-            <span className="text-[12px] text-muted-foreground">
-              {doneCount} of {concepts.length} · {pct}%
-            </span>
-            <div className="hidden h-1 w-24 overflow-hidden rounded-full bg-muted sm:block">
-              <div className="h-full bg-purple" style={{ width: `${pct}%` }} />
-            </div>
           </div>
         </div>
       </header>
 
-      <div className="mx-auto flex max-w-[1100px]">
+      <div className="mx-auto flex max-w-[1400px]">
         {/* Sidebar */}
         <Sidebar
           currentSlug={concept.slug}
@@ -134,25 +170,24 @@ function ConceptPage() {
         />
 
         {/* Main */}
-        <main className="min-w-0 flex-1 px-5 py-9 sm:px-10">
+        <main className="min-w-0 flex-1 px-5 py-12 sm:px-10 lg:px-16">
           <article ref={articleRef} className="relative mx-auto max-w-[660px]">
             <HighlightExplainer containerRef={articleRef} />
 
-            <p className="text-[11px] text-muted-foreground">Module 1 › {concept.shortTitle}</p>
-            <div className="mt-3 flex flex-wrap items-center gap-3 text-[12px]">
-              <span className="rounded-md bg-purple-light px-2 py-0.5 text-[11px] font-medium text-purple-dark">
-                Concept {concept.number} of {concepts.length}
-              </span>
-              <span className="inline-flex items-center gap-1 text-muted-foreground">
-                <Clock size={12} />
-                {concept.readingMinutes} min read · {concept.quiz.length} quiz questions
-              </span>
-            </div>
-
-            <h1 id="concept" className="mt-4 text-[26px] font-medium leading-snug">
+            <h1
+              id="concept"
+              className="text-4xl tracking-tight font-semibold leading-tight text-foreground"
+            >
               {concept.title}
             </h1>
-            <p className="hairline-b mt-3 pb-5 text-[15px] leading-relaxed text-muted-foreground">
+            <div className="mt-4 flex items-center gap-2 text-[13px] text-muted-foreground">
+              <Clock size={14} className="opacity-70" />
+              <span>{concept.readingMinutes} min read</span>
+              <span className="opacity-50">·</span>
+              <span>{concept.quiz.length} quiz questions</span>
+            </div>
+
+            <p className="hairline-b mt-6 pb-5 text-base leading-relaxed text-muted-foreground">
               {concept.summary}
             </p>
 
@@ -171,7 +206,7 @@ function ConceptPage() {
               Select any sentence below to get a plain-English explanation
             </div>
 
-            <div className="mt-7 space-y-5 text-[15px] leading-[1.8] text-foreground">
+            <div className="mt-7 space-y-5 text-base leading-relaxed text-foreground">
               {concept.body.map((block, i) => (
                 <BodyBlock key={i} block={block} />
               ))}
@@ -189,10 +224,8 @@ function ConceptPage() {
                   {concept.pmCallout}
                 </div>
 
-                <div className="mt-5 space-y-3">
-                  {concept.examples.map((ex, i) => (
-                    <ExampleCard key={i} example={ex} index={i} defaultOpen={i === 0} />
-                  ))}
+                <div className="mt-5">
+                  <ExampleTabs examples={concept.examples} />
                 </div>
               </section>
             )}
@@ -230,17 +263,24 @@ function ConceptPage() {
                 )}
               </span>
               {next ? (
-                <Link
-                  to="/playbook/$slug"
-                  params={{ slug: next.slug }}
-                  className={`rounded-md px-3 py-2 text-[13px] font-medium ${
-                    progress[concept.slug] === "done"
-                      ? "bg-purple text-white hover:bg-purple-dark"
-                      : "hairline text-muted-foreground pointer-events-none opacity-60"
-                  }`}
-                >
-                  {next.shortTitle} →
-                </Link>
+                <div className="group relative inline-block">
+                  <Link
+                    to="/playbook/$slug"
+                    params={{ slug: next.slug }}
+                    className={`rounded-md px-3 py-2 text-[13px] font-medium inline-block ${
+                      progress[concept.slug] === "done"
+                        ? "bg-purple text-white hover:bg-purple-dark"
+                        : "hairline text-muted-foreground pointer-events-none opacity-60"
+                    }`}
+                  >
+                    {next.shortTitle} →
+                  </Link>
+                  {progress[concept.slug] !== "done" && (
+                    <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-foreground px-2 py-1 text-[11px] text-background opacity-0 transition-opacity group-hover:opacity-100">
+                      Complete quiz to unlock
+                    </div>
+                  )}
+                </div>
               ) : (
                 <Link
                   to="/playbook"
@@ -252,6 +292,8 @@ function ConceptPage() {
             </div>
           </article>
         </main>
+        {/* Right TOC */}
+        <TableOfContents concept={concept} />
       </div>
       <Footer />
     </div>
@@ -261,11 +303,16 @@ function ConceptPage() {
 function BodyBlock({ block }: { block: ConceptBodyBlock }) {
   if (block.kind === "h") {
     return (
-      <div className="hairline-t mt-10 pt-6">
+      <div
+        className="hairline-t mt-10 pt-6"
+        id={block.title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}
+      >
         <p className="text-[11px] font-medium uppercase tracking-wider text-purple">
           Section {block.number}
         </p>
-        <h2 className="mt-1 text-[20px] font-medium leading-snug text-foreground">{block.title}</h2>
+        <h2 className="mt-1 text-2xl font-semibold tracking-tight leading-snug text-foreground">
+          {block.title}
+        </h2>
         {block.subtitle && (
           <p className="mt-1 text-[14px] italic text-muted-foreground">{block.subtitle}</p>
         )}
@@ -274,8 +321,13 @@ function BodyBlock({ block }: { block: ConceptBodyBlock }) {
   }
   if (block.kind === "h3") {
     return (
-      <div className="mb-2 mt-10 first:mt-2">
-        <h3 className="text-[18px] font-medium leading-snug text-foreground">{block.title}</h3>
+      <div
+        className="mb-2 mt-10 first:mt-2"
+        id={block.title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}
+      >
+        <h3 className="text-xl font-medium tracking-tight leading-snug text-foreground">
+          {block.title}
+        </h3>
         {block.subtitle && (
           <p className="mt-1 text-[14px] leading-relaxed text-muted-foreground">{block.subtitle}</p>
         )}
@@ -320,6 +372,9 @@ function BodyBlock({ block }: { block: ConceptBodyBlock }) {
   if (block.kind === "trans") {
     return <p className="text-[14px] italic leading-relaxed text-muted-foreground">{block.text}</p>;
   }
+  if (block.kind === "diagram") {
+    return <DiagramBlock block={block} />;
+  }
   return (
     <p>
       {block.parts.map((part, i) => {
@@ -348,16 +403,45 @@ function Sidebar({
   onClose: () => void;
 }) {
   const { progress } = useProgress();
+  const [sidebarWidth, setSidebarWidth] = useState(240);
+  const isResizing = useRef(false);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!isResizing.current) return;
+      setSidebarWidth((w) => Math.max(200, Math.min(600, w + e.movementX)));
+    };
+    const handleMouseUp = () => {
+      if (isResizing.current) {
+        isResizing.current = false;
+        document.body.style.cursor = "default";
+        document.body.style.userSelect = "auto";
+      }
+    };
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, []);
 
   const list = (
-    <nav className="px-5 py-6">
-      <p className="section-label">Module 1 · Foundations</p>
+    <nav className="px-5 py-6 flex flex-col">
+      <Link
+        to="/playbook"
+        className="inline-flex items-center text-[13px] text-muted-foreground transition-colors hover:text-foreground mb-6"
+      >
+        ← All concepts
+      </Link>
+      <p className="section-label">AI Foundations for PMs</p>
       <ul className="mt-4 space-y-1">
-        {concepts.map((c) => {
+        {concepts.map((c, idx) => {
           const isCurrent = c.slug === currentSlug;
           const done = progress[c.slug] === "done";
+
           return (
-            <li key={c.slug}>
+            <li key={c.slug} className="flex flex-col">
               <Link
                 to="/playbook/$slug"
                 params={{ slug: c.slug }}
@@ -369,7 +453,7 @@ function Sidebar({
                 }`}
               >
                 <span
-                  className={`flex items-center justify-center rounded-full text-[10px] font-medium ${
+                  className={`flex items-center justify-center rounded-full text-[10px] font-medium shrink-0 ${
                     done
                       ? "bg-success-bg text-success"
                       : isCurrent
@@ -378,7 +462,7 @@ function Sidebar({
                   }`}
                   style={{ width: 20, height: 20 }}
                 >
-                  {done ? <Check size={11} /> : c.number}
+                  {done ? <Check size={11} /> : idx + 1}
                 </span>
                 <span className="truncate">{c.shortTitle}</span>
               </Link>
@@ -386,34 +470,31 @@ function Sidebar({
           );
         })}
       </ul>
-      <div className="hairline-t mt-6 pt-5">
-        <p className="section-label mb-2">On this page</p>
-        <a
-          href="#concept"
-          className="block py-1 text-[13px] text-muted-foreground hover:text-foreground"
-        >
-          The concept
-        </a>
-        <a
-          href="#examples"
-          className="block py-1 text-[13px] text-muted-foreground hover:text-foreground"
-        >
-          5 examples
-        </a>
-        <a
-          href="#quiz"
-          className="block py-1 text-[13px] text-muted-foreground hover:text-foreground"
-        >
-          Quiz
-        </a>
-      </div>
+      <button
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        className="mt-8 text-[12px] text-muted-foreground hover:text-foreground transition-colors inline-flex items-center"
+      >
+        ↑ Back to top
+      </button>
     </nav>
   );
 
   return (
     <>
-      <aside className="hairline-r sticky top-[52px] hidden h-[calc(100vh-52px)] w-[220px] shrink-0 overflow-y-auto bg-background lg:block">
+      <aside
+        className="hairline-r relative sticky top-[52px] hidden h-[calc(100vh-52px)] shrink-0 overflow-y-auto bg-background lg:block"
+        style={{ width: sidebarWidth }}
+      >
         {list}
+        <div
+          className="absolute right-0 top-0 h-full w-1 cursor-col-resize hover:bg-purple-light active:bg-purple"
+          onMouseDown={(e) => {
+            e.preventDefault();
+            isResizing.current = true;
+            document.body.style.cursor = "col-resize";
+            document.body.style.userSelect = "none";
+          }}
+        />
       </aside>
 
       {/* Mobile drawer */}
@@ -432,5 +513,85 @@ function Sidebar({
         </div>
       )}
     </>
+  );
+}
+
+function TableOfContents({
+  concept,
+  mobile,
+}: {
+  concept: NonNullable<ReturnType<typeof conceptBySlug>>;
+  mobile?: boolean;
+}) {
+  const [activeId, setActiveId] = useState<string>("");
+
+  const headings = useMemo(() => {
+    const list: { id: string; title: string; kind: string }[] = [];
+    concept.body.forEach((b) => {
+      if (b.kind === "h" || b.kind === "h3") {
+        list.push({
+          id: b.title.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+          title: b.title,
+          kind: b.kind,
+        });
+      }
+    });
+    if (concept.examples.length > 0) {
+      list.push({ id: "examples", title: "Examples", kind: "h" });
+    }
+    list.push({ id: "quiz", title: "Quiz", kind: "h" });
+    return list;
+  }, [concept]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        // If multiple entries are intersecting, we pick the one closest to the top
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            setActiveId(entry.target.id);
+            break;
+          }
+        }
+      },
+      { rootMargin: "0px 0px -80% 0px" },
+    );
+
+    headings.forEach((h: { id: string; title: string; kind: string }) => {
+      const el = document.getElementById(h.id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, [headings]);
+
+  return (
+    <nav
+      className={
+        mobile
+          ? "w-full"
+          : "sticky top-[52px] h-[calc(100vh-52px)] w-[240px] shrink-0 overflow-y-auto hidden xl:block px-6 py-12"
+      }
+    >
+      <p className="text-[11px] font-semibold tracking-wider uppercase text-muted-foreground mb-4">
+        On this page
+      </p>
+      <ul className="space-y-2.5">
+        {headings.map((h: { id: string; title: string; kind: string }) => (
+          <li key={h.id} className={h.kind === "h3" ? "ml-4" : ""}>
+            <a
+              href={`#${h.id}`}
+              className={`block text-[13px] leading-snug transition-colors ${
+                activeId === h.id
+                  ? "text-purple font-medium"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              {h.title}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
   );
 }

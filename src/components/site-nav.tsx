@@ -55,35 +55,16 @@ export function Nav({ slim = false }: { slim?: boolean }) {
         {!slim && (
           <nav className="hidden items-center gap-7 md:flex">
             <Link
-              to="/playbook"
-              className="text-[13px] text-muted-foreground transition-colors hover:text-foreground"
-            >
-              Concepts
-            </Link>
-            <Link
               to="/playbooks"
               className="text-[13px] text-muted-foreground transition-colors hover:text-foreground"
             >
               Playbooks
             </Link>
             <Link
-              to="/playbook"
-              hash="examples"
-              className="text-[13px] text-muted-foreground transition-colors hover:text-foreground"
-            >
-              Examples
-            </Link>
-            <Link
               to="/about"
               className="text-[13px] text-muted-foreground transition-colors hover:text-foreground"
             >
               About
-            </Link>
-            <Link
-              to="/glossary"
-              className="text-[13px] text-muted-foreground transition-colors hover:text-foreground"
-            >
-              Glossary
             </Link>
           </nav>
         )}

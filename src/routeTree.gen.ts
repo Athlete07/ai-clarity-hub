@@ -11,7 +11,6 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as PlaybooksRouteImport } from './routes/playbooks'
 import { Route as PlaybookRouteImport } from './routes/playbook'
-import { Route as GlossaryRouteImport } from './routes/glossary'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PlaybookIndexRouteImport } from './routes/playbook.index'
@@ -25,11 +24,6 @@ const PlaybooksRoute = PlaybooksRouteImport.update({
 const PlaybookRoute = PlaybookRouteImport.update({
   id: '/playbook',
   path: '/playbook',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const GlossaryRoute = GlossaryRouteImport.update({
-  id: '/glossary',
-  path: '/glossary',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -56,7 +50,6 @@ const PlaybookSlugRoute = PlaybookSlugRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/glossary': typeof GlossaryRoute
   '/playbook': typeof PlaybookRouteWithChildren
   '/playbooks': typeof PlaybooksRoute
   '/playbook/$slug': typeof PlaybookSlugRoute
@@ -65,7 +58,6 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/glossary': typeof GlossaryRoute
   '/playbooks': typeof PlaybooksRoute
   '/playbook/$slug': typeof PlaybookSlugRoute
   '/playbook': typeof PlaybookIndexRoute
@@ -74,7 +66,6 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/glossary': typeof GlossaryRoute
   '/playbook': typeof PlaybookRouteWithChildren
   '/playbooks': typeof PlaybooksRoute
   '/playbook/$slug': typeof PlaybookSlugRoute
@@ -85,24 +76,16 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
-    | '/glossary'
     | '/playbook'
     | '/playbooks'
     | '/playbook/$slug'
     | '/playbook/'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/about'
-    | '/glossary'
-    | '/playbooks'
-    | '/playbook/$slug'
-    | '/playbook'
+  to: '/' | '/about' | '/playbooks' | '/playbook/$slug' | '/playbook'
   id:
     | '__root__'
     | '/'
     | '/about'
-    | '/glossary'
     | '/playbook'
     | '/playbooks'
     | '/playbook/$slug'
@@ -112,7 +95,6 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
-  GlossaryRoute: typeof GlossaryRoute
   PlaybookRoute: typeof PlaybookRouteWithChildren
   PlaybooksRoute: typeof PlaybooksRoute
 }
@@ -131,13 +113,6 @@ declare module '@tanstack/react-router' {
       path: '/playbook'
       fullPath: '/playbook'
       preLoaderRoute: typeof PlaybookRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/glossary': {
-      id: '/glossary'
-      path: '/glossary'
-      fullPath: '/glossary'
-      preLoaderRoute: typeof GlossaryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -188,7 +163,6 @@ const PlaybookRouteWithChildren = PlaybookRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
-  GlossaryRoute: GlossaryRoute,
   PlaybookRoute: PlaybookRouteWithChildren,
   PlaybooksRoute: PlaybooksRoute,
 }
