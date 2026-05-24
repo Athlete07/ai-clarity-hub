@@ -145,9 +145,9 @@ function ConceptPage() {
               </span>
               <span className="inline-flex items-center gap-1 text-muted-foreground">
                 <Clock size={12} />
-                {concept.readingMinutes} min read · {concept.examples.length} examples ·{" "}
-                {concept.quiz.length} questions
+                {concept.readingMinutes} min read · {concept.quiz.length} quiz questions
               </span>
+
             </div>
 
             <h1 id="concept" className="mt-4 text-[26px] font-medium leading-snug">
